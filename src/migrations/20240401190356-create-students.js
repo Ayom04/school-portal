@@ -14,11 +14,11 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      firstName: {
+      first_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      lastName: {
+      last_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -31,6 +31,15 @@ module.exports = {
         allowNull: false,
       },
       is_password_changed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      admission_number: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      is_deleted: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },

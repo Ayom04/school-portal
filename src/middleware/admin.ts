@@ -1,4 +1,3 @@
-const authentication = require("./authentication");
 import { NextFunction, Request, Response } from "express";
 import messages from "../constants/messages";
 import response from "../utils/response";

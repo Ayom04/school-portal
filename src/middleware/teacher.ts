@@ -14,12 +14,12 @@ const authentication = async (
   try {
     if (!userEmail) throw new Error(messages.unauthorisedAccess);
 
-    const userData = await models.Students.findOne({
+    const userData = await models.Teachers.findOne({
       where: { email: userEmail },
     });
     if (!userData) throw new Error(messages.unauthorisedAccess);
 
-    req.params.student_id = userData.student_id;
+    req.params.teacher_id = userData.teacher_id;
 
     next();
   } catch (error: any) {

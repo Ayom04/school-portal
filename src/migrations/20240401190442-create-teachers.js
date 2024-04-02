@@ -14,11 +14,11 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      firstName: {
+      first_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      lastName: {
+      last_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -30,9 +30,18 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      staff_id: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
       password_hash: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      is_deleted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       gender: {
         type: Sequelize.ENUM,
@@ -42,7 +51,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
