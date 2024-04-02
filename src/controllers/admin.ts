@@ -28,11 +28,7 @@ const updateStudent = async (req: Request, res: Response) => {};
 const deleteStudent = async (req: Request, res: Response) => {};
 const getStudent = async (req: Request, res: Response) => {};
 const getStudents = async (req: Request, res: Response) => {};
-const createTeaacher = async (req: Request, res: Response) => {};
-const updateTeacher = async (req: Request, res: Response) => {};
-const deleteTeacher = async (req: Request, res: Response) => {};
-const getTeacher = async (req: Request, res: Response) => {};
-const getTeachers = async (req: Request, res: Response) => {};
+
 const createSubject = async (req: Request, res: Response) => {};
 const updateSubject = async (req: Request, res: Response) => {};
 const deleteSubject = async (req: Request, res: Response) => {};
@@ -50,11 +46,6 @@ export {
   deleteStudent,
   getStudent,
   getStudents,
-  createTeaacher,
-  updateTeacher,
-  deleteTeacher,
-  getTeacher,
-  getTeachers,
   createSubject,
   updateSubject,
   deleteSubject,
