@@ -9,6 +9,19 @@ const generateOtp = (num: number) => {
 
   return Math.floor(c + Math.random() * 9 * c);
 };
+
+const generateRandomCharacters = (num: number): string => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < num; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
+};
+
 const isEmpty = (val: any) => {
   return val === undefined ||
     val == null ||
@@ -43,4 +56,10 @@ const comparePassword = async (
   });
 };
 
-export { hashPassword, comparePassword, isEmpty, generateOtp };
+export {
+  hashPassword,
+  comparePassword,
+  isEmpty,
+  generateOtp,
+  generateRandomCharacters,
+};
