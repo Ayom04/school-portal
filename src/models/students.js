@@ -23,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       gender: DataTypes.ENUM("male", "female", "others"),
       is_deleted: DataTypes.BOOLEAN,
       admission_number: DataTypes.STRING,
+      admission_status: DataTypes.ENUM("pending", "approved", "rejected"),
+      admission_date: DataTypes.DATE,
     },
     {
       sequelize,

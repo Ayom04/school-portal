@@ -11,6 +11,9 @@ const login = async (req: Request, res: Response) => {};
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password, phone } = req.body;
+    const studentExists = await models.Student.findOne({ where: { email } });
+    if (studentExists) response(res, 409, messages.userExists);
+
     const student = await models.Student.create({
       id: uuidv4(),
       firstName,
