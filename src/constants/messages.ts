@@ -4,6 +4,7 @@ const messages = {
   serverError: "Something went wrong",
   unauthorisedAccess: "Unauthorised Access.....",
   studentCreated: "Student Created Successfully",
+  accoutCreated: "Acccount Created Successfully",
   invalidCredentials: "Invalid Credentials",
   loginSuccess: "Login Success",
   userExists: "User with the email/username already exists",
