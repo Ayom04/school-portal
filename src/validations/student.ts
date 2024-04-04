@@ -32,4 +32,25 @@ const validateLogin = Joi.object({
     "any.required": `"Password" is a required field`,
   }),
 });
-export { createStudent, updateStudent, validateLogin };
+const validateEmail = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+});
+const validatePassword = Joi.object({
+  password: Joi.string().required().messages({
+    "string.empty": `"Password" cannot be empty`,
+    "any.required": `"Password" is a required field`,
+  }),
+  confirmPassword: Joi.string().required().valid(Joi.ref("password")).messages({
+    "string.empty": `"confirm Password" cannot be an empty`,
+    "any.required": `"confirm Password" is a required field`,
+  }),
+});
+export {
+  createStudent,
+  updateStudent,
+  validateLogin,
+  validateEmail,
+  validatePassword,
+};

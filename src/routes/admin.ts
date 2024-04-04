@@ -2,16 +2,19 @@ import express from "express";
 import Authorization from "../middleware/authorization";
 import authentication from "../middleware/admin";
 import { validateResigterAdmin } from "../validations/admin";
-import { validateLogin } from "../validations/student";
+import {
+  validateEmail,
+  validateLogin,
+  validatePassword,
+} from "../validations/student";
 import validationMiddleware from "../middleware/validation";
 const router = express.Router();
 import {
   registerAdmin,
-  logIn,
+  login,
   startForgetPassword,
   completeForgetPassword,
   changePassword,
-  login,
   createStudent,
   updateStudent,
   deleteStudent,
@@ -32,6 +35,18 @@ router.post(
   validationMiddleware(validateResigterAdmin),
   registerAdmin
 );
-router.post("/login", validationMiddleware(validateLogin), logIn);
+router.post("/login", validationMiddleware(validateLogin), login);
+
+router.get(
+  "/forget-password",
+  validationMiddleware(validateEmail),
+  startForgetPassword
+);
+
+router.patch(
+  "/reset-password",
+  validationMiddleware(validatePassword),
+  completeForgetPassword
+);
 
 export default router;

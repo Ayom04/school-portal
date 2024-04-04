@@ -30,7 +30,7 @@ const registerAdmin = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
-const logIn = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -136,7 +136,7 @@ const completeForgetPassword = async (req: Request, res: Response) => {
     if (timeDifferenceInMinutes > 5) throw new Error(messages.otpExpired);
 
     const { hash } = await hashPassword(password);
-    await models.Users.update(
+    await models.Admins.update(
       {
         password_hash: hash,
       },
@@ -156,7 +156,7 @@ const completeForgetPassword = async (req: Request, res: Response) => {
   }
 };
 const changePassword = async (req: Request, res: Response) => {};
-const login = async (req: Request, res: Response) => {};
+
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password, phone } = req.body;
@@ -181,7 +181,14 @@ const deleteStudent = async (req: Request, res: Response) => {};
 const getStudent = async (req: Request, res: Response) => {};
 const getStudents = async (req: Request, res: Response) => {};
 
-const createSubject = async (req: Request, res: Response) => {};
+const createSubject = async (req: Request, res: Response) => {
+  const { subject_name, class_name } = req.body;
+  try {
+    console.log(subject_name, class_name);
+  } catch (error: any) {
+    return response(res, 500, messages.serverError, error);
+  }
+};
 const updateSubject = async (req: Request, res: Response) => {};
 const deleteSubject = async (req: Request, res: Response) => {};
 const getSubject = async (req: Request, res: Response) => {};
@@ -192,7 +199,6 @@ const getTermCourses = async (req: Request, res: Response) => {};
 
 export {
   registerAdmin,
-  logIn,
   startForgetPassword,
   completeForgetPassword,
   changePassword,
