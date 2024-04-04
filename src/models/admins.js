@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       admin_id: DataTypes.UUID,
       password_hash: DataTypes.STRING,
       email: DataTypes.STRING,
-      recipient_email: DataTypes.STRING,
+      // recipient_email: DataTypes.STRING,
     },
     {
       sequelize,

@@ -39,6 +39,10 @@ module.exports = {
         values: ["pending", "approved", "rejected"],
         defaultValue: "pending",
       },
+      date_of_birth: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
       admission_number: {
         type: Sequelize.STRING,
         allowNull: false,

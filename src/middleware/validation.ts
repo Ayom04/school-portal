@@ -12,7 +12,7 @@ const validationMiddleware = (schema: any) => {
     } else {
       const { details } = error;
       const message = details.map((i: any) => i.message).join(",");
-      return next(response(res, 400, message));
+      return response(res, 400, message);
     }
   };
 };

@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       admission_number: DataTypes.STRING,
       admission_status: DataTypes.ENUM("pending", "approved", "rejected"),
       admission_date: DataTypes.DATE,
+      date_of_birth: DataTypes.DATE,
     },
     {
       sequelize,

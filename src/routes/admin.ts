@@ -1,7 +1,37 @@
-import { v4 as uuidv4 } from "uuid";
-import jwt from "jsonwebtoken";
-import { NextFunction, Request, Response } from "express";
-import { hashPassword, comparePassword, generateOtp } from "../utils/helper";
-import response from "../utils/response";
-const models = require("../models");
-import messages from "../constants/messages";
+import express from "express";
+import Authorization from "../middleware/authorization";
+import authentication from "../middleware/admin";
+import { validateResigterAdmin } from "../validations/admin";
+import { validateLogin } from "../validations/student";
+import validationMiddleware from "../middleware/validation";
+const router = express.Router();
+import {
+  registerAdmin,
+  logIn,
+  startForgetPassword,
+  completeForgetPassword,
+  changePassword,
+  login,
+  createStudent,
+  updateStudent,
+  deleteStudent,
+  getStudent,
+  getStudents,
+  createSubject,
+  updateSubject,
+  deleteSubject,
+  getSubject,
+  getSubjects,
+  getStudentSubjects,
+  getTeacherSubjects,
+  getTermCourses,
+} from "../controllers/admin";
+
+router.post(
+  "/register",
+  validationMiddleware(validateResigterAdmin),
+  registerAdmin
+);
+router.post("/login", validationMiddleware(validateLogin), logIn);
+
+export default router;

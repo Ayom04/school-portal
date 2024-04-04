@@ -19,4 +19,17 @@ const createStudent = Joi.object({
   }),
 });
 const updateStudent = Joi.object({});
-export { createStudent, updateStudent };
+const validateLogin = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required()
+    .messages({
+      "string.empty": `"Email" cannot be an empty`,
+      "any.required": `"Email" is a required field`,
+    }),
+  password: Joi.string().required().messages({
+    "string.empty": `"Password" cannot be empty`,
+    "any.required": `"Password" is a required field`,
+  }),
+});
+export { createStudent, updateStudent, validateLogin };
