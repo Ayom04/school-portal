@@ -28,11 +28,20 @@ module.exports = {
       },
       password_hash: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       is_password_changed: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      admission_status: {
+        type: Sequelize.ENUM,
+        values: ["pending", "approved", "rejected"],
+        defaultValue: "pending",
+      },
+      date_of_birth: {
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       admission_number: {
         type: Sequelize.STRING,
@@ -46,6 +55,10 @@ module.exports = {
       gender: {
         type: Sequelize.ENUM,
         values: ["male", "female", "others"],
+      },
+      admission_date: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

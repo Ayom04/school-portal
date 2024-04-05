@@ -4,10 +4,12 @@ import messages from "./src/constants/messages";
 import response from "./src/utils/response";
 import cors from "cors";
 import logger from "./src/config/logger";
+
+import adminRoute from "./src/routes/admin";
+import registrationRoute from "./src/routes/registration";
+
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
-
-import registrationRoute from "./src/routes/registration";
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +20,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/registration", registrationRoute);
+app.use("/api/v1/admin", adminRoute);
 
 app.use((req: Request, res: Response) => {
   response(res, 404, messages.invalidRoute);

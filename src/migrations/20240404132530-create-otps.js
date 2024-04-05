@@ -2,41 +2,39 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Admins", {
+    await queryInterface.createTable("Otps", {
       id: {
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true,
+        unique: true,
         type: Sequelize.INTEGER,
       },
-      admin_id: {
-        allowNull: false,
-        primaryKey: true,
+      otp_id: {
         type: Sequelize.UUID,
+        primaryKey: true,
+        allowNull: false,
       },
-      email: {
+      otp: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      // recipient_email: {
-      //   type: Sequelize.STRING,
-      //   allowNull: false,
-      // },
-      password_hash: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Admins");
+    await queryInterface.dropTable("Otps");
   },
 };

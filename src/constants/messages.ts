@@ -6,6 +6,7 @@ const messages = {
   unauthorizedPermission:
     "you don't have the permission to carry out this operation",
   studentCreated: "Student Created Successfully",
+  adminCreated: "admin created successfully",
   Registration: "Registration Successful",
   invalidCredentials: "Invalid Credentials",
   loginSuccess: "Login Success",

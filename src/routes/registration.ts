@@ -5,7 +5,7 @@ import {
   registerStudent,
   updateRegistrationStatus,
 } from "../controllers/registration";
-import { registrationSchema } from "../validation/registration";
+import { registrationSchema } from "../validations/registration";
 import Authorization from "../middleware/authorization";
 import checkAdmin from "../middleware/admin";
 

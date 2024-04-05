@@ -6,7 +6,13 @@ import response from "../utils/response";
 const models = require("../models");
 import messages from "../constants/messages";
 
-const changePassword = async (req: Request, res: Response) => {};
+const changePassword = async (req: Request, res: Response) => {
+  const { password } = req.body;
+  try {
+  } catch (error: any) {
+    return response(res, 500, error.message);
+  }
+};
 const login = async (req: Request, res: Response) => {};
 const getProfile = async (req: Request, res: Response) => {};
 const getSubjects = async (req: Request, res: Response) => {};
