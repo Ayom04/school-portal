@@ -10,6 +10,7 @@ import {
   generateRandomCharacters,
   hashPassword,
 } from "../utils/helper";
+import { ADMISSION_STATUS } from "../constants/enum";
 
 const registerStudent = async (req: Request, res: Response) => {
   const {
@@ -54,6 +55,7 @@ const registerStudent = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+
 const getRegisteredStudents = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
   try {
@@ -97,7 +99,7 @@ const createStudent = async (req: Request, res: Response) => {
     });
     if (!student) throw new Error(messages.notFound);
 
-    if (admissionStatus === "rejected") {
+    if (admissionStatus === ADMISSION_STATUS.REJECTED) {
       const dataReplacement = {
         student_name: `${student.surname} ${student.othernames}`,
         school_name: process.env.SCHOOL_NAME,
@@ -109,7 +111,8 @@ const createStudent = async (req: Request, res: Response) => {
         dataReplacement,
         "reject_admission"
       );
-    } else if (admissionStatus === "admitted") {
+      await deleteRegistration(studentEmail);
+    } else if (admissionStatus === ADMISSION_STATUS.ADMITTED) {
       const studentData = await models.Students.findOne({
         where: {
           email: studentEmail,
@@ -118,7 +121,7 @@ const createStudent = async (req: Request, res: Response) => {
       if (studentData) throw new Error(messages.forbidden);
       const password = await generateRandomCharacters(10);
       const admissionNumber = await generateMatricNumber();
-
+      console.log("admissionNumber: ", admissionNumber);
       const { hash } = await hashPassword(password);
 
       await models.Students.create({
@@ -128,9 +131,9 @@ const createStudent = async (req: Request, res: Response) => {
         date_of_birth: student.dataValues.date_of_birth,
         gender: student.dataValues.gender,
         photo_url: student.dataValues.photo_url,
-        phone: student.dataValues.phone,
+        phone: student.phone,
         email: studentEmail,
-        password: hash,
+        password_hash: hash,
         admission_number: admissionNumber,
         class: studentClass,
       });
@@ -149,12 +152,14 @@ const createStudent = async (req: Request, res: Response) => {
         studentEmail,
         "Admission Approval",
         dataReplacement,
-        "admit_student"
+        "approve_admission"
       );
+      await deleteRegistration(studentEmail);
     }
-    await deleteRegistration(studentEmail);
+
     return response(res, 200, messages.updateStudent);
   } catch (error: any) {
+    console.log(error);
     return response(res, 400, error.message);
   }
 };

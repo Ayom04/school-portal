@@ -7,7 +7,10 @@ import {
   getRegisteredStudents,
   deletePendingRegistrations,
 } from "../controllers/registration";
-import { registrationSchema } from "../validations/registration";
+import {
+  registrationSchema,
+  createStudentSchema,
+} from "../validations/registration";
 import Authorization from "../middleware/authorization";
 import checkAdmin from "../middleware/admin";
 
@@ -23,7 +26,8 @@ router.get(
   getRegisteredStudents
 );
 router.patch(
-  "/create-student/:studentEmail",
+  "/create-student",
+  validationMiddleware(createStudentSchema),
   Authorization,
   checkAdmin,
   createStudent

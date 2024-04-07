@@ -28,9 +28,12 @@ const createStudentSchema = Joi.object({
     "string.empty": "Email is required",
     "string.email": "Email must be a valid email",
   }),
-  admissionStatus: Joi.string().valid("admitted", "rejected").messages({
-    "string.empty": "admission_status is required",
-  }),
+  admissionStatus: Joi.string()
+    .required()
+    .valid("admitted", "rejected")
+    .messages({
+      "string.empty": "admission_status is required",
+    }),
   studentCLass: Joi.string().required().messages({
     "string.empty": "class is required",
   }),

@@ -68,18 +68,20 @@ const generateMatricNumber = async (): Promise<string> => {
   }
 
   const year: string = new Date().getFullYear().toString().slice(2);
-  let paddedNumber;
+  let paddedNumber: string;
 
   if (autoIncrement < 10) {
-    paddedNumber = autoIncrement.toString().padStart(3, "0");
+    paddedNumber = `00${autoIncrement}`;
   } else if (autoIncrement < 100) {
-    paddedNumber = autoIncrement.toString().padStart(2, "0");
+    paddedNumber = `0${autoIncrement}`;
   } else {
     paddedNumber = autoIncrement.toString();
   }
-  const matricNumber: string = `${process.env.SCHOOL_NAME_SHORT}/${year}/${paddedNumber}`;
+
   autoIncrement++;
   fs.writeFileSync("autoIncrement.txt", autoIncrement.toString(), "utf8");
+
+  const matricNumber: string = `${process.env.SCHOOL_NAME_SHORT}/${year}/${paddedNumber}`;
 
   return matricNumber;
 };
@@ -100,9 +102,9 @@ const generateStaffID = async (): Promise<string> => {
   let paddedNumber;
 
   if (autoIncrement < 10) {
-    paddedNumber = autoIncrement.toString().padStart(3, "0");
+    paddedNumber = `00${autoIncrement}`;
   } else if (autoIncrement < 100) {
-    paddedNumber = autoIncrement.toString().padStart(2, "0");
+    paddedNumber = `0${autoIncrement}`;
   } else {
     paddedNumber = autoIncrement.toString();
   }

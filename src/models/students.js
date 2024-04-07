@@ -24,9 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       is_deleted: DataTypes.BOOLEAN,
       date_of_birth: DataTypes.DATE,
       class: DataTypes.STRING,
+      photo_url: DataTypes.STRING,
       admission_number: DataTypes.STRING,
-      admission_status: DataTypes.ENUM("pending", "approved", "rejected"),
-      admission_date: DataTypes.DATE,
       date_of_birth: DataTypes.DATE,
     },
     {

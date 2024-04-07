@@ -60,6 +60,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      photo_url: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       gender: {
         type: Sequelize.ENUM,
         values: ["male", "female", "others"],
