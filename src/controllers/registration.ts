@@ -67,6 +67,23 @@ const getRegisteredStudents = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+const deletePendingRegistrations = async (req: Request, res: Response) => {
+  const { admin_id } = req.params;
+  try {
+    if (!admin_id) throw new Error(messages.unauthorizedPermission);
+
+    const students = await models.Registrations.findAll();
+    if (!students) throw new Error(messages.notFound);
+
+    await models.Registrations.destroy({
+      where: { admission_status: "pending" },
+    });
+
+    return response(res, 200, messages.updateStudent);
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
 const createStudent = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
   const { studentEmail, admissionStatus, studentClass } = req.body;
@@ -142,4 +159,9 @@ const createStudent = async (req: Request, res: Response) => {
   }
 };
 
-export { registerStudent, createStudent, getRegisteredStudents };
+export {
+  registerStudent,
+  createStudent,
+  getRegisteredStudents,
+  deletePendingRegistrations,
+};

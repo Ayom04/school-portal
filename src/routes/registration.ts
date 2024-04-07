@@ -5,6 +5,7 @@ import {
   registerStudent,
   createStudent,
   getRegisteredStudents,
+  deletePendingRegistrations,
 } from "../controllers/registration";
 import { registrationSchema } from "../validations/registration";
 import Authorization from "../middleware/authorization";
@@ -26,6 +27,12 @@ router.patch(
   Authorization,
   checkAdmin,
   createStudent
+);
+router.delete(
+  "/delete-pending-registrations",
+  Authorization,
+  checkAdmin,
+  deletePendingRegistrations
 );
 
 export default router;
