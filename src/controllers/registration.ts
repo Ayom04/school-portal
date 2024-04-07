@@ -51,7 +51,6 @@ const registerStudent = async (req: Request, res: Response) => {
     });
     return response(res, 201, messages.Registration);
   } catch (error: any) {
-    console.log(error);
     return response(res, 400, error.message);
   }
 };
