@@ -54,7 +54,19 @@ const registerStudent = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+const getRegisteredStudents = async (req: Request, res: Response) => {
+  const { admin_id } = req.params;
+  try {
+    if (!admin_id) throw new Error(messages.unauthorizedPermission);
 
+    const students = await models.Registrations.findAll();
+    if (!students) throw new Error(messages.notFound);
+
+    return response(res, 200, students);
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
 const createStudent = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
   const { studentEmail, admissionStatus, studentClass } = req.body;
@@ -80,7 +92,6 @@ const createStudent = async (req: Request, res: Response) => {
         dataReplacement,
         "reject_admission"
       );
-      await deleteRegistration(studentEmail);
     } else if (admissionStatus === "admitted") {
       const studentData = await models.Students.findOne({
         where: {
@@ -124,10 +135,11 @@ const createStudent = async (req: Request, res: Response) => {
         "admit_student"
       );
     }
+    await deleteRegistration(studentEmail);
     return response(res, 200, messages.updateStudent);
   } catch (error: any) {
     return response(res, 400, error.message);
   }
 };
 
-export { registerStudent, createStudent };
+export { registerStudent, createStudent, getRegisteredStudents };
