@@ -6,21 +6,25 @@ module.exports = {
       id: {
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true,
+        unique: true,
         type: Sequelize.INTEGER,
       },
       subject_id: {
-        type: Sequelize.UUID,
         allowNull: false,
         primaryKey: true,
+        type: Sequelize.UUID,
       },
       subject_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      class: {
-        type: Sequelize.ENUM,
-        values: ["JSS1", "JSS2", "JSS3", "SS1", "SS2", "SS3"],
+      class_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: "Classes",
+          key: "class_id",
+        },
       },
       createdAt: {
         allowNull: false,

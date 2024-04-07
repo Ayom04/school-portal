@@ -1,5 +1,7 @@
 const saltRounds = 10;
 import bcrypt from "bcryptjs";
+import * as fs from "fs";
+let autoIncrement: number;
 
 const generateOtp = (num: number) => {
   if (num < 2) {
@@ -56,7 +58,48 @@ const comparePassword = async (
   });
 };
 
+const generateMatricNumber = (): string => {
+  let autoIncrement: number;
+
+  try {
+    autoIncrement = parseInt(fs.readFileSync("autoIncrement.txt", "utf8"), 10);
+  } catch (err) {
+    autoIncrement = 1;
+  }
+
+  const year: string = new Date().getFullYear().toString().slice(2);
+  const paddedNumber: string = autoIncrement.toString().padStart(3, "0");
+  const matricNumber: string = `${process.env.SCHOOL_NAME}/${year}/${paddedNumber}`;
+  autoIncrement++;
+  fs.writeFileSync("autoIncrement.txt", autoIncrement.toString(), "utf8");
+
+  return matricNumber;
+};
+
+const generateStaffID = (): string => {
+  let autoIncrement;
+
+  try {
+    autoIncrement = parseInt(
+      fs.readFileSync("staffAutoIncrement.txt", "utf8"),
+      10
+    );
+  } catch (err) {
+    autoIncrement = 1;
+  }
+
+  const year = new Date().getFullYear().toString().slice(2);
+  const paddedNumber = autoIncrement.toString().padStart(3, "0");
+  const staffID = `STAFF${year}${paddedNumber}`;
+  autoIncrement++;
+  fs.writeFileSync("staffAutoIncrement.txt", autoIncrement.toString(), "utf8");
+
+  return staffID;
+};
+
 export {
+  generateMatricNumber,
+  generateStaffID,
   hashPassword,
   comparePassword,
   isEmpty,

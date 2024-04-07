@@ -10,9 +10,9 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       otp_id: {
-        type: Sequelize.UUID,
-        primaryKey: true,
         allowNull: false,
+        primaryKey: true,
+        type: Sequelize.UUID,
       },
       otp: {
         type: Sequelize.STRING,

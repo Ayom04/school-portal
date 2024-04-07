@@ -6,19 +6,19 @@ module.exports = {
       id: {
         allowNull: false,
         autoIncrement: true,
-        type: Sequelize.INTEGER,
         unique: true,
+        type: Sequelize.INTEGER,
       },
       student_id: {
-        type: Sequelize.UUID,
         allowNull: false,
         primaryKey: true,
+        type: Sequelize.UUID,
       },
-      first_name: {
+      surname: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      last_name: {
+      othernames: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -26,18 +26,26 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      class: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "JSS1",
+      },
       password_hash: {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      photo_url: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       is_password_changed: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
-      },
-      admission_status: {
-        type: Sequelize.ENUM,
-        values: ["pending", "approved", "rejected"],
-        defaultValue: "pending",
       },
       date_of_birth: {
         type: Sequelize.DATE,
@@ -55,10 +63,6 @@ module.exports = {
       gender: {
         type: Sequelize.ENUM,
         values: ["male", "female", "others"],
-      },
-      admission_date: {
-        type: Sequelize.DATE,
-        allowNull: true,
       },
       createdAt: {
         allowNull: false,
