@@ -6,6 +6,7 @@ import cors from "cors";
 import logger from "./src/config/logger";
 
 import adminRoute from "./src/routes/admin";
+import registrationRoute from "./src/routes/registration";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +19,7 @@ app.get("/", (req: Request, res: Response) => {
   return response(res, 200, messages.welcomeMessage);
 });
 
+app.use("/api/v1/registration", registrationRoute);
 app.use("/api/v1/admin", adminRoute);
 
 app.use((req: Request, res: Response) => {

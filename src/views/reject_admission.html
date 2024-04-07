@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Application Rejection</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        color: #333;
+      }
+      p {
+        margin-bottom: 20px;
+        color: #555;
+      }
+      .footer {
+        margin-top: 20px;
+        text-align: center;
+        color: #777;
+      }
+      .school-name {
+        color: #007bff; /* Blue */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Application Rejection Notification</h2>
+      <p>Dear {{student_name}}</p>
+      <p>
+        We regret to inform you that your application to
+        <span class="school-name">{{schoolName}}</span> has not been successful.
+        We sincerely appreciate your interest in our institution and the time
+        you invested in the application process.
+      </p>
+      <p>
+        While we carefully consider each application, unfortunately, we are
+        unable to offer you admission at this time. We encourage you to explore
+        other educational opportunities that align with your goals and
+        aspirations.
+      </p>
+      <p>
+        Thank you again for considering
+        <span class="school-name">{{schoolName}}</span>.
+      </p>
+      <div class="footer">
+        <p>Sincerely,</p>
+        <p>The Admissions Team</p>
+        <p><span class="school-name">{{schoolName}}</span></p>
+      </div>
+    </div>
+  </body>
+</html>

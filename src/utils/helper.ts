@@ -12,7 +12,7 @@ const generateOtp = (num: number) => {
   return Math.floor(c + Math.random() * 9 * c);
 };
 
-const generateRandomCharacters = (num: number): string => {
+const generateRandomCharacters = async (num: number): Promise<string> => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
@@ -58,7 +58,7 @@ const comparePassword = async (
   });
 };
 
-const generateMatricNumber = (): string => {
+const generateMatricNumber = async (): Promise<string> => {
   let autoIncrement: number;
 
   try {
@@ -77,14 +77,14 @@ const generateMatricNumber = (): string => {
   } else {
     paddedNumber = autoIncrement.toString();
   }
-  const matricNumber: string = `${process.env.SCHOOL_NAME}/${year}/${paddedNumber}`;
+  const matricNumber: string = `${process.env.SCHOOL_NAME_SHORT}/${year}/${paddedNumber}`;
   autoIncrement++;
   fs.writeFileSync("autoIncrement.txt", autoIncrement.toString(), "utf8");
 
   return matricNumber;
 };
 
-const generateStaffID = (): string => {
+const generateStaffID = async (): Promise<string> => {
   let autoIncrement;
 
   try {

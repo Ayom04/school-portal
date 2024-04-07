@@ -25,7 +25,7 @@ const registerAdmin = async (req: Request, res: Response) => {
       email,
       password_hash: hash,
     });
-    return response(res, 201, messages.accoutCreated);
+    return response(res, 201, messages.adminCreated);
   } catch (error: any) {
     return response(res, 400, error.message);
   }

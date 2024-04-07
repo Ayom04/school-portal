@@ -3,12 +3,15 @@ const messages = {
   welcomeMessage: "Welcome to the API",
   serverError: "Something went wrong",
   unauthorisedAccess: "Unauthorised Access.....",
+  unauthorizedPermission:
+    "you don't have the permission to carry out this operation",
   studentCreated: "Student Created Successfully",
-  accoutCreated: "Acccount Created Successfully",
+  adminCreated: "admin created successfully",
+  Registration: "Registration Successful",
   invalidCredentials: "Invalid Credentials",
   loginSuccess: "Login Success",
-  userExists: "User with the email/username already exists",
-  notFound: "not found",
+  userExists: "student with the email/username already exists",
+  notFound: "student not found",
   userNotFound: "User not found",
   walletFetched: "wallet balance fetched successfully",
   passwordLink: "password reset link successfully sent to your email addresss",
@@ -34,7 +37,7 @@ const messages = {
   userDetailsMessage: "user details message",
   deleteUser: "user deleted successfully",
   permissonChanged: "user permission changed successfully",
-  updateUser: "user detail updated successfully",
+  updateStudent: "student detail updated successfully",
   forbidden: "Sorry, unable to register",
   signUpBonus: "Sign up welcome bonus",
   unpaid: "please proceed to make payment",
@@ -44,5 +47,7 @@ const messages = {
   serviceNotFound:
     "We're sorry, but it seems there was an issue processing your request. Please try again later or contact support for assistance.",
   complaint: "complaint sent successfully",
+  pendindAdmission:
+    "We're sorry, this operation couldn't be done because you have a pending admission.",
 };
 export default messages;
