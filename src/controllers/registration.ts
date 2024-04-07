@@ -30,7 +30,7 @@ const registerStudent = async (req: Request, res: Response) => {
     photo_url?: string;
   } = req.body;
   try {
-    const checkIfStudentExists = await models.Registration.findOne({
+    const checkIfStudentExists = await models.Registrations.findOne({
       where: {
         email,
       },
@@ -51,6 +51,7 @@ const registerStudent = async (req: Request, res: Response) => {
     });
     return response(res, 201, messages.Registration);
   } catch (error: any) {
+    console.log(error);
     return response(res, 400, error.message);
   }
 };

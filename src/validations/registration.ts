@@ -11,7 +11,7 @@ const registrationSchema = Joi.object({
     "string.empty": "Email is required",
     "string.email": "Email must be a valid email",
   }),
-  dob: Joi.string().required().messages({
+  dob: Joi.date().required().messages({
     "date.empty": "date of birth is required",
   }),
   phone: Joi.string().required().messages({
