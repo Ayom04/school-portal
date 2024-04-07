@@ -14,11 +14,11 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      firstName: {
+      surname: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      lastName: {
+      othernames: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -41,9 +41,14 @@ module.exports = {
         defaultValue: "pending",
         allowNull: false,
       },
-      dob: {
+      date_of_birth: {
         type: Sequelize.DATE,
         allowNull: false,
+      },
+      photo_url: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       createdAt: {
         allowNull: false,

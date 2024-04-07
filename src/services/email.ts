@@ -89,8 +89,7 @@ const readFileAndSendEmail = async (
 const sendHtmlEmail = (
   receiverEmail: string,
   subject: string,
-  message: string,
-  link?: string
+  message: string
 ) => {
   const htmlContent = `<html><body><p>${message}</p></body></html>`;
 

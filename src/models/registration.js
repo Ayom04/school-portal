@@ -14,13 +14,14 @@ module.exports = (sequelize, DataTypes) => {
   Registration.init(
     {
       registration_id: DataTypes.UUID,
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
+      surname: DataTypes.STRING,
+      othernames: DataTypes.STRING,
       email: DataTypes.STRING,
       gender: DataTypes.ENUM("male", "female", "others"),
       admission_status: DataTypes.ENUM("admitted", "pending", "rejected"),
-      dob: DataTypes.DATE,
+      date_of_birth: DataTypes.DATE,
       phone: DataTypes.STRING,
+      photo_url: DataTypes.STRING,
     },
     {
       sequelize,

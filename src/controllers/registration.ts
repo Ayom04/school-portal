@@ -3,10 +3,12 @@ import { NextFunction, Request, Response } from "express";
 import response from "../utils/response";
 const models = require("../models");
 import messages from "../constants/messages";
-import { where } from "sequelize";
+import {  deleteRegistration } from "../utils/index";
+import { sendHtmlEmail } from "../services/email";
 
 const registerStudent = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, gender, dob } = req.body;
+  const { firstName, lastName, email, phone, gender, dob, photo_url } : {firstName:string, lastName:string, email:string, phone:string, gender:string, dob:string, photo_url?:string} =
+    req.body;
   try {
     const checkIfStudentExists = await models.Registration.findOne({
       where: {
@@ -15,14 +17,18 @@ const registerStudent = async (req: Request, res: Response) => {
     });
     if (checkIfStudentExists) throw new Error(messages.userExists);
 
+    const profilePicture = `https://api.dicebear.com/7.x/micah/svg?seed=${
+      username||name}`;
+      
     await models.Registration.create({
       registration_id: uuidv4(),
       email,
-      firstName,
-      lastName,
+      first_name: firstName,
+      last_name: lastName,
       phone,
       gender,
-      dob,
+      date_of_birth: dob,
+      photo_url: photo_url? photo_url: profilePicture,
     });
     return response(res, 201, messages.Registration);
   } catch (error: any) {
@@ -30,27 +36,33 @@ const registerStudent = async (req: Request, res: Response) => {
   }
 };
 
-const updateRegistrationStatus = async (req: Request, res: Response) => {
-  const { studentEmail, admin_id, admission_status } = req.params;
+const createStudent = async (req: Request, res: Response) => {
+  const { admin_id } = req.params;
+  const { student_email, admission_status, class } = req.body;
   try {
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
-    if (!studentEmail) throw new Error(messages.unauthorisedAccess);
 
     const student = await models.Registration.findOne({
       where: {
-        email: studentEmail,
+        email: student_email,
       },
     });
     if (!student) throw new Error(messages.notFound);
 
-    await models.Registration.update(
-      { admission_status },
-      { where: { registration_id: student.registration_id } }
-    );
+    if(admission_status === "rejected"){
+      const subject = `admission rejected`
+      const message = `we're sorry ${student.othernames}, your admission was rejected`
+
+      
+      sendHtmlEmail( student.email, subject, message);
+      deleteRegistration(student_email);
+    }else if(admission_status === "admitted"){
+      const admissionNumber = `76540${student.id}`
+    }
     return response(res, 200, messages.updateStudent);
   } catch (error: any) {
     return response(res, 400, error.message);
   }
 };
 
-export { registerStudent, updateRegistrationStatus };
+export { registerStudent, createStudent };

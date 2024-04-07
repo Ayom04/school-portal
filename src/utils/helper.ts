@@ -1,5 +1,6 @@
 const saltRounds = 10;
 import bcrypt from "bcryptjs";
+const models = require("../models");
 
 const generateOtp = (num: number) => {
   if (num < 2) {
@@ -55,6 +56,10 @@ const comparePassword = async (
     }
   });
 };
+
+
+
+
 
 export {
   hashPassword,
