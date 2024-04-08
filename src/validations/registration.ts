@@ -23,20 +23,4 @@ const registrationSchema = Joi.object({
   photo_url: Joi.string(),
 });
 
-const createStudentSchema = Joi.object({
-  studentEmail: Joi.string().email().required().messages({
-    "string.empty": "Email is required",
-    "string.email": "Email must be a valid email",
-  }),
-  admissionStatus: Joi.string()
-    .required()
-    .valid("admitted", "rejected")
-    .messages({
-      "string.empty": "admission_status is required",
-    }),
-  studentCLass: Joi.string().required().messages({
-    "string.empty": "class is required",
-  }),
-});
-
-export { registrationSchema, createStudentSchema };
+export { registrationSchema };

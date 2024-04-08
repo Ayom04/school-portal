@@ -64,7 +64,7 @@ const getRegisteredStudents = async (req: Request, res: Response) => {
     const students = await models.Registrations.findAll();
     if (!students) throw new Error(messages.notFound);
 
-    return response(res, 200, students);
+    return response(res, 200, messages.getRgisteredStudentMessage, students);
   } catch (error: any) {
     return response(res, 400, error.message);
   }
@@ -72,7 +72,7 @@ const getRegisteredStudents = async (req: Request, res: Response) => {
 const deletePendingRegistrations = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
   try {
-    if (!admin_id) throw new Error(messages.unauthorizedPermission);
+    if (!admin_id) throw new Error(messages.unauthorisedAccess);
 
     const students = await models.Registrations.findAll();
     if (!students) throw new Error(messages.notFound);
@@ -81,92 +81,10 @@ const deletePendingRegistrations = async (req: Request, res: Response) => {
       where: { admission_status: "pending" },
     });
 
-    return response(res, 200, messages.updateStudent);
+    return response(res, 200, messages.deletePendingAdmissionsMessage);
   } catch (error: any) {
     return response(res, 400, error.message);
   }
 };
-const createStudent = async (req: Request, res: Response) => {
-  const { admin_id } = req.params;
-  const { studentEmail, admissionStatus, studentClass } = req.body;
-  try {
-    if (!admin_id) throw new Error(messages.unauthorizedPermission);
 
-    const student = await models.Registrations.findOne({
-      where: {
-        email: studentEmail,
-      },
-    });
-    if (!student) throw new Error(messages.notFound);
-
-    if (admissionStatus === ADMISSION_STATUS.REJECTED) {
-      const dataReplacement = {
-        student_name: `${student.surname} ${student.othernames}`,
-        school_name: process.env.SCHOOL_NAME,
-      };
-
-      await readFileAndSendEmail(
-        student.email,
-        "Application Rejection",
-        dataReplacement,
-        "reject_admission"
-      );
-      await deleteRegistration(studentEmail);
-    } else if (admissionStatus === ADMISSION_STATUS.ADMITTED) {
-      const studentData = await models.Students.findOne({
-        where: {
-          email: studentEmail,
-        },
-      });
-      if (studentData) throw new Error(messages.forbidden);
-      const password = await generateRandomCharacters(10);
-      const admissionNumber = await generateMatricNumber();
-      console.log("admissionNumber: ", admissionNumber);
-      const { hash } = await hashPassword(password);
-
-      await models.Students.create({
-        student_id: uuidv4(),
-        surname: student.dataValues.surname,
-        othernames: student.dataValues.othernames,
-        date_of_birth: student.dataValues.date_of_birth,
-        gender: student.dataValues.gender,
-        photo_url: student.dataValues.photo_url,
-        phone: student.phone,
-        email: studentEmail,
-        password_hash: hash,
-        admission_number: admissionNumber,
-        class: studentClass,
-      });
-
-      const dataReplacement = {
-        student_name: `${student.surname} ${student.othernames}`,
-        school_name: process.env.SCHOOL_NAME,
-        admission_number: admissionNumber,
-        password,
-        support: `${process.env.SCHOOL_NAME?.toLowerCase().replace(
-          " ",
-          ""
-        )}@support.com`,
-      };
-      readFileAndSendEmail(
-        studentEmail,
-        "Admission Approval",
-        dataReplacement,
-        "approve_admission"
-      );
-      await deleteRegistration(studentEmail);
-    }
-
-    return response(res, 200, messages.updateStudent);
-  } catch (error: any) {
-    console.log(error);
-    return response(res, 400, error.message);
-  }
-};
-
-export {
-  registerStudent,
-  createStudent,
-  getRegisteredStudents,
-  deletePendingRegistrations,
-};
+export { registerStudent, getRegisteredStudents, deletePendingRegistrations };

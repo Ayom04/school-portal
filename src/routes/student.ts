@@ -1,7 +1,17 @@
-import { v4 as uuidv4 } from "uuid";
-import jwt from "jsonwebtoken";
-import { NextFunction, Request, Response } from "express";
-import { hashPassword, comparePassword, generateOtp } from "../utils/helper";
-import response from "../utils/response";
-const models = require("../models");
-import messages from "../constants/messages";
+import express from "express";
+const router = express.Router();
+import validationMiddleware from "../middleware/validation";
+import { createStudentSchema } from "../validations/student";
+import Authorization from "../middleware/authorization";
+import checkAdmin from "../middleware/admin";
+import { createStudent } from "../controllers/student";
+
+router.post(
+  "/create-student",
+  Authorization,
+  checkAdmin,
+  validationMiddleware(createStudentSchema),
+  createStudent
+);
+
+export default router;

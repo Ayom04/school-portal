@@ -6,11 +6,11 @@
     <title>Application Rejection</title>
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
         margin: 0;
         padding: 0;
-        background-color: #f2f2f2;
+        background-color: #f9f9f9; /* Light gray */
       }
       .container {
         max-width: 600px;
@@ -22,46 +22,67 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
       h2 {
-        color: #333;
+        font-family: "Arial Black", Arial, sans-serif;
+        color: #333; /* Dark gray */
+        margin-bottom: 20px;
       }
       p {
-        margin-bottom: 20px;
-        color: #555;
+        font-size: 16px;
+        color: #333; /* Dark gray */
+        margin-bottom: 15px;
       }
       .footer {
-        margin-top: 20px;
         text-align: center;
-        color: #777;
+        color: #555; /* Slightly darker gray */
+        margin-top: 20px;
       }
       .school-name {
+        font-weight: bold;
         color: #007bff; /* Blue */
+      }
+      .italic {
+        font-style: italic;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      .regret {
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h2>Application Rejection Notification</h2>
-      <p>Dear {{student_name}}</p>
+      <h2>Application Rejection</h2>
+      <p class="italic">
+        <span class="bold regret">Dear {{student_name}},</span>
+      </p>
       <p>
-        We regret to inform you that your application to
-        <span class="school-name">{{schoolName}}</span> has not been successful.
+        We <span class="bold regret">regret</span> to inform you that your
+        application to <span class="school-name">{{school_name}}</span> has not
+        been successful.
+      </p>
+      <p>
         We sincerely appreciate your interest in our institution and the time
         you invested in the application process.
       </p>
       <p>
-        While we carefully consider each application, unfortunately, we are
-        unable to offer you admission at this time. We encourage you to explore
-        other educational opportunities that align with your goals and
-        aspirations.
+        While we carefully consider each application,
+        <span class="bold">unfortunately</span>, we are unable to offer you
+        admission at this time.
       </p>
       <p>
-        Thank you again for considering
-        <span class="school-name">{{schoolName}}</span>.
+        We encourage you to explore other educational opportunities that align
+        with your goals and aspirations.
+      </p>
+      <p class="italic">
+        <span class="bold">Thank you again</span> for considering
+        <span class="school-name">{{school_name}}</span>.
       </p>
       <div class="footer">
-        <p>Sincerely,</p>
-        <p>The Admissions Team</p>
-        <p><span class="school-name">{{schoolName}}</span></p>
+        <p class="bold">Sincerely,</p>
+        <p class="bold" style="color: #007bff">The Admissions Team</p>
+        <p><span class="school-name">{{school_name}}</span></p>
       </div>
     </div>
   </body>
