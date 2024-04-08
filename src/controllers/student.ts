@@ -93,14 +93,87 @@ const createStudent = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
-const changePassword = async (req: Request, res: Response) => {
-  const { password } = req.body;
+
+const login = async (req: Request, res: Response) => {
+  const { admissionNumber, password } = req.body;
+
   try {
+    const student = await models.Students.findOne({
+      where: {
+        admission_number: admissionNumber,
+      },
+    });
+
+    if (!student) throw new Error(messages.invalidCredentials);
+
+    if (!student.dataValues.is_password_changed) {
+      return res.redirect(
+        `${process.env.PASSWORD_CHANGE_URL}?admissionNumber=${student.dataValues.admission_number}`
+      );
+    }
+
+    const checkPasssword = await comparePassword(
+      password,
+      student.dataValues.password_hash
+    );
+
+    if (!checkPasssword) throw new Error(messages.invalidCredentials);
+
+    const token = jwt.sign(
+      {
+        email: student.dataValues.email,
+        _id: uuidv4(),
+      },
+      process.env.JWT_SECRET || "somethingsecret",
+      {
+        expiresIn: "24h",
+      }
+    );
+    res.set("Authorization", `Bearer ${token}`);
+    return response(res, 200, messages.loginSuccess, {
+      token,
+    });
   } catch (error: any) {
-    return response(res, 500, error.message);
+    return response(res, 400, error.message);
   }
 };
-const login = async (req: Request, res: Response) => {};
+const changePassword = async (req: Request, res: Response) => {
+  const { admissionNumber } = req.query;
+  const { password } = req.body;
+
+  try {
+    if (!admissionNumber) throw new Error(messages.invalidCredentials);
+
+    const student = await models.Students.findOne({
+      where: {
+        admission_number: admissionNumber,
+      },
+    });
+
+    if (!student) throw new Error(messages.invalidCredentials);
+
+    const checkPasssword = await comparePassword(
+      password,
+      student.dataValues.password_hash
+    );
+    if (checkPasssword) throw new Error(messages.passwordMisamtch);
+
+    const { hash } = await hashPassword(password);
+    await models.Students.update(
+      {
+        password_hash: hash,
+        is_password_changed: true,
+      },
+      {
+        where: { admission_number: admissionNumber },
+      }
+    );
+
+    response(res, 200, messages.passwordUpdatedSuccesfully);
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
 const getProfile = async (req: Request, res: Response) => {};
 const getSubjects = async (req: Request, res: Response) => {};
 
