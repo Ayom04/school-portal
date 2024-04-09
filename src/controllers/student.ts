@@ -137,6 +137,7 @@ const login = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+
 const changePassword = async (req: Request, res: Response) => {
   const { admissionNumber } = req.query;
   const { password } = req.body;
@@ -175,6 +176,7 @@ const changePassword = async (req: Request, res: Response) => {
   }
 };
 const getProfile = async (req: Request, res: Response) => {};
+
 const getSubjects = async (req: Request, res: Response) => {};
 
 export { createStudent, login, changePassword, getProfile, getSubjects };

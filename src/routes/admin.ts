@@ -13,7 +13,6 @@ import {
   startForgetPassword,
   completeForgetPassword,
   changePassword,
-  createStudent,
   updateStudent,
   deleteStudent,
   getStudent,
@@ -33,6 +32,7 @@ router.post(
   validationMiddleware(validateResigterAdmin),
   registerAdmin
 );
+
 router.post("/login", validationMiddleware(validateAdminLogin), login);
 
 router.get(

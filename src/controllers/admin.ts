@@ -30,6 +30,7 @@ const registerAdmin = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -155,27 +156,9 @@ const completeForgetPassword = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+
 const changePassword = async (req: Request, res: Response) => {};
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    const { firstName, lastName, email, password, phone } = req.body;
-    const studentExists = await models.Student.findOne({ where: { email } });
-    if (studentExists) response(res, 409, messages.userExists);
-
-    const student = await models.Student.create({
-      id: uuidv4(),
-      firstName,
-      lastName,
-      email,
-      password: hashPassword(password),
-      phone,
-    });
-    return response(res, 201, messages.studentCreated, student);
-  } catch (error) {
-    return response(res, 500, messages.serverError, error);
-  }
-};
 const updateStudent = async (req: Request, res: Response) => {};
 const deleteStudent = async (req: Request, res: Response) => {};
 const getStudent = async (req: Request, res: Response) => {};
@@ -203,7 +186,6 @@ export {
   completeForgetPassword,
   changePassword,
   login,
-  createStudent,
   updateStudent,
   deleteStudent,
   getStudent,

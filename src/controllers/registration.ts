@@ -1,16 +1,8 @@
+import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { NextFunction, Request, Response } from "express";
+import messages from "../constants/messages";
 import response from "../utils/response";
 const models = require("../models");
-import messages from "../constants/messages";
-import { deleteRegistration } from "../utils/index";
-import { readFileAndSendEmail, sendHtmlEmail } from "../services/email";
-import {
-  generateMatricNumber,
-  generateRandomCharacters,
-  hashPassword,
-} from "../utils/helper";
-import { ADMISSION_STATUS } from "../constants/enum";
 
 const registerStudent = async (req: Request, res: Response) => {
   const {
@@ -69,6 +61,7 @@ const getRegisteredStudents = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+
 const deletePendingRegistrations = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
   try {
@@ -87,4 +80,4 @@ const deletePendingRegistrations = async (req: Request, res: Response) => {
   }
 };
 
-export { registerStudent, getRegisteredStudents, deletePendingRegistrations };
+export { deletePendingRegistrations, getRegisteredStudents, registerStudent };
