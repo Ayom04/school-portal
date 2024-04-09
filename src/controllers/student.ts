@@ -165,7 +165,7 @@ const startForgetPassword = async (
       });
     }
     const { hash } = await hashPassword(String(otp));
-    console.log(hash);
+
     const link = `${process.env.STUDENT_RESET_PASSWORD_URL}?email=${admissionNumber}&otp=${hash}`;
 
     const dataReplacement = {
