@@ -3,18 +3,16 @@ const router = express.Router();
 import validationMiddleware from "../middleware/validation";
 import {
   createStudentSchema,
-  passwordSchema,
+  validatePassword,
+  validateStudentLogin,
+    passwordSchema,
   validatePassword,
   validateEmail,
 } from "../validations/student";
 import Authorization from "../middleware/authorization";
 import checkAdmin from "../middleware/admin";
-import authentication from "../middleware/authentication";
-import {
-  createStudent,
-  startForgetPassword,
-  completeForgetPassword,
-} from "../controllers/student";
+import { changePassword, createStudent, login , startForgetPassword, completeForgetPassword} from "../controllers/student";
+  
 
 router.post(
   "/create-student",
@@ -22,6 +20,15 @@ router.post(
   checkAdmin,
   validationMiddleware(createStudentSchema),
   createStudent
+);
+
+
+router.post("/login", validationMiddleware(validateStudentLogin), login);
+
+router.patch(
+  "/change-password",
+  validationMiddleware(validatePassword),
+  changePassword
 );
 
 router.post(
@@ -35,5 +42,6 @@ router.patch(
   validationMiddleware(validatePassword),
   completeForgetPassword
 );
+
 
 export default router;

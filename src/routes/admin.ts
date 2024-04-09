@@ -2,11 +2,9 @@ import express from "express";
 import Authorization from "../middleware/authorization";
 import authentication from "../middleware/admin";
 import { validateResigterAdmin } from "../validations/admin";
-import {
-  validateEmail,
-  validateLogin,
-  validatePassword,
-} from "../validations/student";
+import { validateEmail, validatePassword } from "../validations/student";
+import { validateAdminLogin } from "../validations/admin";
+
 import validationMiddleware from "../middleware/validation";
 const router = express.Router();
 import {
@@ -15,7 +13,6 @@ import {
   startForgetPassword,
   completeForgetPassword,
   changePassword,
-  createStudent,
   updateStudent,
   deleteStudent,
   getStudent,
@@ -35,7 +32,8 @@ router.post(
   validationMiddleware(validateResigterAdmin),
   registerAdmin
 );
-router.post("/login", validationMiddleware(validateLogin), login);
+
+router.post("/login", validationMiddleware(validateAdminLogin), login);
 
 router.get(
   "/forget-password",

@@ -18,7 +18,7 @@ import { where } from "sequelize";
 
 const createStudent = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
-  const { studentEmail, admissionStatus, studentClass } = req.body;
+  const { studentEmail, admissionStatus } = req.body;
   try {
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
 
@@ -61,11 +61,11 @@ const createStudent = async (req: Request, res: Response) => {
         date_of_birth: student.dataValues.date_of_birth,
         gender: student.dataValues.gender,
         photo_url: student.dataValues.photo_url,
+        class: student.dataValues.class,
         phone: student.phone,
         email: studentEmail,
         password_hash: hash,
         admission_number: admissionNumber,
-        class: studentClass,
       });
 
       const dataReplacement = {
@@ -95,7 +95,52 @@ const createStudent = async (req: Request, res: Response) => {
   }
 };
 
-const startForgetPassword = async (
+
+const login = async (req: Request, res: Response) => {
+  const { admissionNumber, password } = req.body;
+
+  try {
+    const student = await models.Students.findOne({
+      where: {
+        admission_number: admissionNumber,
+      },
+    });
+
+    if (!student) throw new Error(messages.invalidCredentials);
+
+    if (!student.dataValues.is_password_changed) {
+      return res.redirect(
+        `${process.env.PASSWORD_CHANGE_URL}?admissionNumber=${student.dataValues.admission_number}`
+      );
+    }
+
+    const checkPasssword = await comparePassword(
+      password,
+      student.dataValues.password_hash
+    );
+
+    if (!checkPasssword) throw new Error(messages.invalidCredentials);
+
+    const token = jwt.sign(
+      {
+        email: student.dataValues.email,
+        _id: uuidv4(),
+      },
+      process.env.JWT_SECRET || "somethingsecret",
+      {
+        expiresIn: "24h",
+      }
+    );
+    res.set("Authorization", `Bearer ${token}`);
+    return response(res, 200, messages.loginSuccess, {
+      token,
+    });
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
+
+  const startForgetPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -108,7 +153,7 @@ const startForgetPassword = async (
     });
 
     if (!student) throw new Error(messages.invalidCredentials);
-
+  
     const otp = generateOtp(6);
     const _otp = await models.Otps.findOne({
       where: { email_or_admssionNumber: admissionNumber },
@@ -135,6 +180,46 @@ const startForgetPassword = async (
     );
 
     return response(res, 200, messages.passwordLink);
+
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
+
+
+const changePassword = async (req: Request, res: Response) => {
+  const { admissionNumber } = req.query;
+  const { password } = req.body;
+
+  try {
+    if (!admissionNumber) throw new Error(messages.invalidCredentials);
+
+    const student = await models.Students.findOne({
+      where: {
+        admission_number: admissionNumber,
+      },
+    });
+
+    if (!student) throw new Error(messages.invalidCredentials);
+
+    const checkPasssword = await comparePassword(
+      password,
+      student.dataValues.password_hash
+    );
+    if (checkPasssword) throw new Error(messages.passwordMisamtch);
+
+    const { hash } = await hashPassword(password);
+    await models.Students.update(
+      {
+        password_hash: hash,
+        is_password_changed: true,
+      },
+      {
+        where: { admission_number: admissionNumber },
+      }
+    );
+
+    response(res, 200, messages.passwordUpdatedSuccesfully);
   } catch (error: any) {
     return response(res, 400, error.message);
   }
@@ -169,6 +254,7 @@ const completeForgetPassword = async (req: Request, res: Response) => {
 
     if (timeDifferenceInMinutes > 5) throw new Error(messages.otpExpired);
 
+
     const { hash } = await hashPassword(password);
     await models.Students.update(
       {
@@ -176,22 +262,27 @@ const completeForgetPassword = async (req: Request, res: Response) => {
         is_password_changed: true,
       },
       {
-        where: { admissionNumber },
+        where: { admission_number: admissionNumber },
       }
     );
 
+    response(res, 200, messages.passwordUpdatedSuccesfully);
+
+     
     await models.Otps.destroy({
       where: {
-        email: admissionNumber,
+        email_or_admssionNumber: admissionNumber,
       },
     });
     return response(res, 200, messages.passwordReset);
+
   } catch (error: any) {
     return response(res, 400, error.message);
   }
 };
 
-const login = async (req: Request, res: Response) => {};
+
+
 const getProfile = async (req: Request, res: Response) => {
   const { student_id } = req.params;
   try {

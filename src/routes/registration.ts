@@ -15,6 +15,7 @@ router.post(
   validationMiddleware(registrationSchema),
   registerStudent
 );
+
 router.get(
   "/get-registered-students",
   Authorization,

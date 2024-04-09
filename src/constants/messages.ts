@@ -36,5 +36,8 @@ const messages = {
   pendindAdmission:
     "We're sorry, this operation couldn't be done because you have a pending admission.",
   deletePendingAdmissionsMessage: "pending admission deleted successfully",
+  passwordUpdatedSuccesfully: "Your Password has been updated successfully",
+  passwordMisamtch:
+    "Please create a new password diffent from your old password",
 };
 export default messages;

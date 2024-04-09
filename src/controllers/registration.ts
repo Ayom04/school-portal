@@ -1,16 +1,9 @@
+import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { NextFunction, Request, Response } from "express";
-import response from "../utils/response";
-const models = require("../models");
 import messages from "../constants/messages";
-import { deleteRegistration } from "../utils/index";
-import { readFileAndSendEmail, sendHtmlEmail } from "../services/email";
-import {
-  generateMatricNumber,
-  generateRandomCharacters,
-  hashPassword,
-} from "../utils/helper";
-import { ADMISSION_STATUS } from "../constants/enum";
+import response from "../utils/response";
+import { studentClassEnum } from "../constants/enum";
+const models = require("../models");
 
 const registerStudent = async (req: Request, res: Response) => {
   const {
@@ -21,6 +14,7 @@ const registerStudent = async (req: Request, res: Response) => {
     gender,
     dob,
     photo_url,
+    student_class,
   }: {
     surname: string;
     othernames: string;
@@ -29,6 +23,7 @@ const registerStudent = async (req: Request, res: Response) => {
     gender: string;
     dob: string;
     photo_url?: string;
+    student_class: string;
   } = req.body;
   try {
     const checkIfStudentExists = await models.Registrations.findOne({
@@ -45,6 +40,7 @@ const registerStudent = async (req: Request, res: Response) => {
       othernames,
       phone,
       gender,
+      class: studentClassEnum[student_class as keyof typeof studentClassEnum],
       date_of_birth: dob,
       photo_url: photo_url
         ? photo_url
@@ -69,6 +65,7 @@ const getRegisteredStudents = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+
 const deletePendingRegistrations = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
   try {
@@ -87,4 +84,4 @@ const deletePendingRegistrations = async (req: Request, res: Response) => {
   }
 };
 
-export { registerStudent, getRegisteredStudents, deletePendingRegistrations };
+export { deletePendingRegistrations, getRegisteredStudents, registerStudent };
