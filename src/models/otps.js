@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       otp_id: DataTypes.UUID,
       otp: DataTypes.STRING,
-      email: DataTypes.STRING,
+      email_or_admssionNumber: DataTypes.STRING,
     },
     {
       sequelize,

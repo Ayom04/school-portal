@@ -95,36 +95,40 @@ const createStudent = async (req: Request, res: Response) => {
   }
 };
 
-const studentForgetPassword = async (
+const startForgetPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { email } = req.body;
+  const { admissionNumber } = req.body;
 
   try {
-    const student = await models.Students.findOne({ where: { email } });
+    const student = await models.Students.findOne({
+      where: { admissionNumber },
+    });
 
     if (!student) throw new Error(messages.invalidCredentials);
 
     const otp = generateOtp(6);
-    const _otp = await models.Otps.findOne({ where: { email } });
+    const _otp = await models.Otps.findOne({
+      where: { email_or_admssionNumber: admissionNumber },
+    });
     if (!_otp) {
       await models.Otps.create({
         otp_id: uuidv4(),
         otp,
-        email,
+        email_or_admssionNumber: admissionNumber,
       });
     }
     const { hash } = await hashPassword(String(otp));
-    const link = `${process.env.STUDENT_RESET_PASSWORD_URL}?email=${email}&otp=${hash}`;
+    const link = `${process.env.STUDENT_RESET_PASSWORD_URL}?email=${admissionNumber}&otp=${hash}`;
 
     const dataReplacement = {
       resetPasswordlink: link,
     };
 
     await readFileAndSendEmail(
-      email,
+      student.dataValues.email,
       "password reset",
       dataReplacement,
       "forget_password"
@@ -136,17 +140,20 @@ const studentForgetPassword = async (
   }
 };
 
-const studentCompleteForgetPassword = async (req: Request, res: Response) => {
+const completeForgetPassword = async (req: Request, res: Response) => {
   const { password } = req.body;
-  const { email, otp } = req.query;
+  const { admissionNumber, otp } = req.query;
 
   try {
-    const student = await models.Students.findOne({ where: { email } });
+    1;
+    const student = await models.Students.findOne({
+      where: { admissionNumber },
+    });
     if (!student) throw new Error(messages.invalidCredentials);
 
     const _otp = await models.Otps.findOne({
       where: {
-        email,
+        email_or_admssionNumber: admissionNumber,
       },
     });
     if (!_otp) throw new Error(messages.notFound);
@@ -169,13 +176,13 @@ const studentCompleteForgetPassword = async (req: Request, res: Response) => {
         is_password_changed: true,
       },
       {
-        where: { email },
+        where: { admissionNumber },
       }
     );
 
     await models.Otps.destroy({
       where: {
-        email,
+        email: admissionNumber,
       },
     });
     return response(res, 200, messages.passwordReset);
@@ -184,47 +191,43 @@ const studentCompleteForgetPassword = async (req: Request, res: Response) => {
   }
 };
 
-const changeStudentPassword = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {};
+const getProfile = async (req: Request, res: Response) => {
   const { student_id } = req.params;
-  const { current_password, new_password, confirmNew_password } = req.body;
   try {
-    if (!student_id) throw new Error(messages.unauthorisedAccess);
+    if (!student_id) throw new Error(messages.unauthorizedPermission);
+    const student = await models.Students.findOne({
+      where: { student_id },
+      attributes: [
+        "surname",
+        "othernames",
+        "email",
+        "phone",
+        "gender",
+        "date_of_birth",
+        "class",
+        "photo_url",
+        "admission_number",
+      ],
+    });
 
-    const student = await models.Students.findOne({ where: { student_id } });
     if (!student) throw new Error(messages.notFound);
 
-    const checkPasssword = await comparePassword(
-      current_password,
-      student.dataValues.password_hash
-    );
-    if (!checkPasssword) throw new Error(messages.invalidCredentials);
-
-    const { hash } = await hashPassword(new_password);
-    await models.Students.update(
-      {
-        password_hash: hash,
-        is_password_changed: true,
-      },
-      {
-        where: { student_id },
-      }
-    );
-
-    return response(res, 200, messages.passwordReset);
+    return response(res, 200, messages.studentRetrievedMessage, {
+      studentDetail: student,
+    });
   } catch (error: any) {
-    return response(res, 500, error.message);
+    return response(res, 400, error.message);
   }
 };
-const login = async (req: Request, res: Response) => {};
-const getProfile = async (req: Request, res: Response) => {};
+
 const getSubjects = async (req: Request, res: Response) => {};
 
 export {
   createStudent,
   login,
-  changeStudentPassword,
+  startForgetPassword,
+  completeForgetPassword,
   getProfile,
   getSubjects,
-  studentForgetPassword,
-  studentCompleteForgetPassword,
 };

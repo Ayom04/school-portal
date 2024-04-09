@@ -12,9 +12,8 @@ import checkAdmin from "../middleware/admin";
 import authentication from "../middleware/authentication";
 import {
   createStudent,
-  changeStudentPassword,
-  studentForgetPassword,
-  studentCompleteForgetPassword,
+  startForgetPassword,
+  completeForgetPassword,
 } from "../controllers/student";
 
 router.post(
@@ -25,24 +24,16 @@ router.post(
   createStudent
 );
 
-router.patch(
-  "/change_password",
-  Authorization,
-  authentication,
-  validationMiddleware(passwordSchema),
-  changeStudentPassword
-);
-
 router.post(
   "/forget_password",
   validationMiddleware(validateEmail),
-  studentForgetPassword
+  startForgetPassword
 );
 
 router.patch(
   "/reset_password",
   validationMiddleware(validatePassword),
-  studentCompleteForgetPassword
+  completeForgetPassword
 );
 
 export default router;
