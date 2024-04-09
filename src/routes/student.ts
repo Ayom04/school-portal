@@ -5,6 +5,7 @@ import {
   createStudentSchema,
   passwordSchema,
   validatePassword,
+  validateEmail,
 } from "../validations/student";
 import Authorization from "../middleware/authorization";
 import checkAdmin from "../middleware/admin";
@@ -34,10 +35,14 @@ router.patch(
 
 router.post(
   "/forget_password",
-  validationMiddleware(validatePassword),
+  validationMiddleware(validateEmail),
   studentForgetPassword
 );
 
-router.patch("/reset_password");
+router.patch(
+  "/reset_password",
+  validationMiddleware(validatePassword),
+  studentCompleteForgetPassword
+);
 
 export default router;
