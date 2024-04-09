@@ -5,10 +5,14 @@ import {
   createStudentSchema,
   validatePassword,
   validateStudentLogin,
+    passwordSchema,
+  validatePassword,
+  validateEmail,
 } from "../validations/student";
 import Authorization from "../middleware/authorization";
 import checkAdmin from "../middleware/admin";
-import { changePassword, createStudent, login } from "../controllers/student";
+import { changePassword, createStudent, login , startForgetPassword, completeForgetPassword} from "../controllers/student";
+  
 
 router.post(
   "/create-student",
@@ -18,6 +22,7 @@ router.post(
   createStudent
 );
 
+
 router.post("/login", validationMiddleware(validateStudentLogin), login);
 
 router.patch(
@@ -25,4 +30,18 @@ router.patch(
   validationMiddleware(validatePassword),
   changePassword
 );
+
+router.post(
+  "/forget_password",
+  validationMiddleware(validateEmail),
+  startForgetPassword
+);
+
+router.patch(
+  "/reset_password",
+  validationMiddleware(validatePassword),
+  completeForgetPassword
+);
+
+
 export default router;
