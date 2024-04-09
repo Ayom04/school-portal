@@ -41,6 +41,11 @@ module.exports = {
         defaultValue: "pending",
         allowNull: false,
       },
+      class: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "JSS1",
+      },
       date_of_birth: {
         type: Sequelize.DATE,
         allowNull: false,

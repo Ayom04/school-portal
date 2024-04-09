@@ -11,9 +11,6 @@ const createStudentSchema = Joi.object({
     .messages({
       "string.empty": "admission status is required",
     }),
-  studentClass: Joi.string().required().messages({
-    "string.empty": "class is required",
-  }),
 });
 
 const updateStudent = Joi.object({});

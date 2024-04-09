@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import messages from "../constants/messages";
 import response from "../utils/response";
+import { studentClassEnum } from "../constants/enum";
 const models = require("../models");
 
 const registerStudent = async (req: Request, res: Response) => {
@@ -13,6 +14,7 @@ const registerStudent = async (req: Request, res: Response) => {
     gender,
     dob,
     photo_url,
+    student_class,
   }: {
     surname: string;
     othernames: string;
@@ -21,6 +23,7 @@ const registerStudent = async (req: Request, res: Response) => {
     gender: string;
     dob: string;
     photo_url?: string;
+    student_class: string;
   } = req.body;
   try {
     const checkIfStudentExists = await models.Registrations.findOne({
@@ -37,6 +40,7 @@ const registerStudent = async (req: Request, res: Response) => {
       othernames,
       phone,
       gender,
+      class: studentClassEnum[student_class as keyof typeof studentClassEnum],
       date_of_birth: dob,
       photo_url: photo_url
         ? photo_url

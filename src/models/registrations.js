@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       date_of_birth: DataTypes.DATE,
       phone: DataTypes.STRING,
       photo_url: DataTypes.STRING,
+      class: DataTypes.STRING, // might still be refractored
     },
     {
       sequelize,

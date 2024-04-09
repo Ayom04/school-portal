@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       photo_url: DataTypes.STRING,
       admission_number: DataTypes.STRING,
       date_of_birth: DataTypes.DATE,
+      class: DataTypes.STRING,
     },
     {
       sequelize,

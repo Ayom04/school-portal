@@ -17,7 +17,7 @@ import { deleteRegistration } from "../utils";
 
 const createStudent = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
-  const { studentEmail, admissionStatus, studentClass } = req.body;
+  const { studentEmail, admissionStatus } = req.body;
   try {
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
 
@@ -60,11 +60,11 @@ const createStudent = async (req: Request, res: Response) => {
         date_of_birth: student.dataValues.date_of_birth,
         gender: student.dataValues.gender,
         photo_url: student.dataValues.photo_url,
+        class: student.dataValues.class,
         phone: student.phone,
         email: studentEmail,
         password_hash: hash,
         admission_number: admissionNumber,
-        class: studentClass,
       });
 
       const dataReplacement = {
