@@ -44,10 +44,41 @@ const validatePassword = Joi.object({
     "any.required": `"confirm Password" is a required field`,
   }),
 });
+
+const studentEmailSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required()
+    .messages({
+      "string.empty": `"Email" cannot be an empty`,
+      "any.required": `"Email" is a required field`,
+    }),
+});
+
+const passwordSchema = Joi.object({
+  current_password: Joi.string().required().messages({
+    "string.empty": `"Password" cannot be empty`,
+    "any.required": `"Password" is a required field`,
+  }),
+  new_password: Joi.string().required().messages({
+    "string.empty": `"confirm Password" cannot be an empty`,
+    "any.required": `"confirm Password" is a required field`,
+  }),
+  confirmNew_password: Joi.string()
+    .required()
+    .valid(Joi.ref("new_password"))
+    .messages({
+      "string.empty": `"confirm Password" cannot be an empty`,
+      "any.required": `"confirm Password" is a required field`,
+    }),
+});
+
 export {
   createStudentSchema,
   updateStudent,
   validateLogin,
   validateEmail,
   validatePassword,
+  studentEmailSchema,
+  passwordSchema,
 };
