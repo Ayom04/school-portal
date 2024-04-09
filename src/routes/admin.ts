@@ -1,8 +1,8 @@
 import express from "express";
 import Authorization from "../middleware/authorization";
 import authentication from "../middleware/admin";
-import { validateResigterAdmin } from "../validations/admin";
-import { validateEmail, validatePassword } from "../validations/student";
+import { validateEmail, validateResigterAdmin } from "../validations/admin";
+import { validatePassword } from "../validations/student";
 import { validateAdminLogin } from "../validations/admin";
 
 import validationMiddleware from "../middleware/validation";
@@ -35,7 +35,7 @@ router.post(
 
 router.post("/login", validationMiddleware(validateAdminLogin), login);
 
-router.get(
+router.post(
   "/forget-password",
   validationMiddleware(validateEmail),
   startForgetPassword

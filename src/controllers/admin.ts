@@ -82,15 +82,18 @@ const startForgetPassword = async (
     if (!user) throw new Error(messages.invalidCredentials);
 
     const otp = generateOtp(6);
-    const _otp = await models.Otps.findOne({ where: { email } });
+    const _otp = await models.Otps.findOne({
+      where: { email_or_admssionNumber: email },
+    });
     if (!_otp) {
       await models.Otps.create({
         otp_id: uuidv4(),
         otp,
-        email,
+        email_or_admssionNumber: email,
       });
     }
     const { hash } = await hashPassword(String(otp));
+
     const link = `${process.env.ADMIN_RESET_PASSWORD_URL}?email=${email}&otp=${hash}`;
 
     const dataReplacement = {
@@ -120,7 +123,7 @@ const completeForgetPassword = async (req: Request, res: Response) => {
 
     const _otp = await models.Otps.findOne({
       where: {
-        email,
+        email_or_admssionNumber: email,
       },
     });
     if (!_otp) throw new Error(messages.notFound);
@@ -148,7 +151,7 @@ const completeForgetPassword = async (req: Request, res: Response) => {
 
     await models.Otps.destroy({
       where: {
-        email,
+        email_or_admssionNumber: email,
       },
     });
     return response(res, 200, messages.passwordReset);

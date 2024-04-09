@@ -19,24 +19,18 @@ const validateStudentLogin = Joi.object({
     "string.empty": `"Admission Number" cannot be empty`,
     "any.required": `"Admission Number" is a required field`,
   }),
-  password: Joi.string()
-    .min(6)
-    .regex(/^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,}$/)
-    .required()
-    .label("Password")
-    .messages({
-      "string.empty": `"Password" cannot be an empty`,
-      "string.min": `"Password" should have a minimum length of {#limit}`,
-      "any.required": `"Password" is a required field`,
-      "object.regex": `Must have at least 8 characters`,
-      "string.pattern.base": `Password must contain at least a number and  letters `,
-    }),
+  password: Joi.string().min(8).required().label("Password").messages({
+    "string.empty": `"Password" cannot be an empty`,
+    "string.min": `"Password" should have a minimum length of {#limit}`,
+    "any.required": `"Password" is a required field`,
+  }),
 });
 
-const validateEmail = Joi.object({
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
+const validateAdmissioNumberSchema = Joi.object({
+  admissionNumber: Joi.string().required().messages({
+    "string.empty": `"Admission Number" cannot be empty`,
+    "any.required": `"Admission Number" is a required field`,
+  }),
 });
 
 const validatePassword = Joi.object({
@@ -60,6 +54,7 @@ const validatePassword = Joi.object({
       /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]{8,}$/
     )
     .required()
+    .valid(Joi.ref("password"))
     .label("Password")
     .messages({
       "string.empty": `"confirm Password" cannot be an empty`,
@@ -67,16 +62,7 @@ const validatePassword = Joi.object({
       "any.required": `"confirm Password" is a required field`,
       "object.regex": `confirm Password Must have at least 8 characters`,
       "string.pattern.base": `confirm Password must contain at least a number, letter and special characters`,
-    }),
-});
-
-const studentEmailSchema = Joi.object({
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required()
-    .messages({
-      "string.empty": `"Email" cannot be an empty`,
-      "any.required": `"Email" is a required field`,
+      "any.only": `"confirm Password" must match the password`,
     }),
 });
 
@@ -102,8 +88,7 @@ export {
   createStudentSchema,
   updateStudent,
   validateStudentLogin,
-  validateEmail,
+  validateAdmissioNumberSchema,
   validatePassword,
-  studentEmailSchema,
   passwordSchema,
 };

@@ -45,4 +45,10 @@ const validateAdminLogin = Joi.object({
       "string.pattern.base": `Password must contain at least a number, letter and special characters`,
     }),
 });
-export { validateResigterAdmin, validateAdminLogin };
+const validateEmail = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+});
+
+export { validateResigterAdmin, validateAdminLogin, validateEmail };

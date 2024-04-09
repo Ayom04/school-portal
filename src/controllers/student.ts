@@ -95,7 +95,6 @@ const createStudent = async (req: Request, res: Response) => {
   }
 };
 
-
 const login = async (req: Request, res: Response) => {
   const { admissionNumber, password } = req.body;
 
@@ -140,7 +139,7 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-  const startForgetPassword = async (
+const startForgetPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -149,11 +148,11 @@ const login = async (req: Request, res: Response) => {
 
   try {
     const student = await models.Students.findOne({
-      where: { admissionNumber },
+      where: { admission_number: admissionNumber },
     });
 
     if (!student) throw new Error(messages.invalidCredentials);
-  
+
     const otp = generateOtp(6);
     const _otp = await models.Otps.findOne({
       where: { email_or_admssionNumber: admissionNumber },
@@ -166,6 +165,7 @@ const login = async (req: Request, res: Response) => {
       });
     }
     const { hash } = await hashPassword(String(otp));
+    console.log(hash);
     const link = `${process.env.STUDENT_RESET_PASSWORD_URL}?email=${admissionNumber}&otp=${hash}`;
 
     const dataReplacement = {
@@ -180,12 +180,61 @@ const login = async (req: Request, res: Response) => {
     );
 
     return response(res, 200, messages.passwordLink);
-
   } catch (error: any) {
     return response(res, 400, error.message);
   }
 };
 
+const completeForgetPassword = async (req: Request, res: Response) => {
+  const { password } = req.body;
+  const { admissionNumber, otp } = req.query;
+
+  try {
+    1;
+    const student = await models.Students.findOne({
+      where: { admission_number: admissionNumber },
+    });
+    if (!student) throw new Error(messages.invalidCredentials);
+
+    const _otp = await models.Otps.findOne({
+      where: {
+        email_or_admssionNumber: admissionNumber,
+      },
+    });
+    if (!_otp) throw new Error(messages.notFound);
+    const checkIfOtpMatch = comparePassword(_otp.dataValues.otp, otp as string);
+    if (!checkIfOtpMatch) throw new Error(messages.invalidOtp);
+
+    const timeDifference: number =
+      new Date().getTime() - new Date(_otp.createdAt).getTime();
+
+    const timeDifferenceInMinutes = Math.ceil(
+      timeDifference / (1000 * 60 * 60 * 24)
+    );
+
+    if (timeDifferenceInMinutes > 5) throw new Error(messages.otpExpired);
+
+    const { hash } = await hashPassword(password);
+    await models.Students.update(
+      {
+        password_hash: hash,
+        is_password_changed: true,
+      },
+      {
+        where: { admission_number: admissionNumber },
+      }
+    );
+
+    await models.Otps.destroy({
+      where: {
+        email_or_admssionNumber: admissionNumber,
+      },
+    });
+    return response(res, 200, messages.passwordReset);
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
 
 const changePassword = async (req: Request, res: Response) => {
   const { admissionNumber } = req.query;
@@ -201,6 +250,9 @@ const changePassword = async (req: Request, res: Response) => {
     });
 
     if (!student) throw new Error(messages.invalidCredentials);
+
+    if (student.dataValues.is_password_changed)
+      throw new Error(messages.unauthorizedPermission);
 
     const checkPasssword = await comparePassword(
       password,
@@ -225,68 +277,10 @@ const changePassword = async (req: Request, res: Response) => {
   }
 };
 
-const completeForgetPassword = async (req: Request, res: Response) => {
-  const { password } = req.body;
-  const { admissionNumber, otp } = req.query;
-
-  try {
-    1;
-    const student = await models.Students.findOne({
-      where: { admissionNumber },
-    });
-    if (!student) throw new Error(messages.invalidCredentials);
-
-    const _otp = await models.Otps.findOne({
-      where: {
-        email_or_admssionNumber: admissionNumber,
-      },
-    });
-    if (!_otp) throw new Error(messages.notFound);
-    const checkIfOtpMatch = comparePassword(_otp.dataValues.otp, otp as string);
-    if (!checkIfOtpMatch) throw new Error(messages.invalidOtp);
-
-    const timeDifference: number =
-      new Date().getTime() - new Date(_otp.createdAt).getTime();
-
-    const timeDifferenceInMinutes = Math.ceil(
-      timeDifference / (1000 * 60 * 60 * 24)
-    );
-
-    if (timeDifferenceInMinutes > 5) throw new Error(messages.otpExpired);
-
-
-    const { hash } = await hashPassword(password);
-    await models.Students.update(
-      {
-        password_hash: hash,
-        is_password_changed: true,
-      },
-      {
-        where: { admission_number: admissionNumber },
-      }
-    );
-
-    response(res, 200, messages.passwordUpdatedSuccesfully);
-
-     
-    await models.Otps.destroy({
-      where: {
-        email_or_admssionNumber: admissionNumber,
-      },
-    });
-    return response(res, 200, messages.passwordReset);
-
-  } catch (error: any) {
-    return response(res, 400, error.message);
-  }
-};
-
-
-
 const getProfile = async (req: Request, res: Response) => {
   const { student_id } = req.params;
   try {
-    if (!student_id) throw new Error(messages.unauthorizedPermission);
+    if (!student_id) throw new Error(messages.unauthorisedAccess);
     const student = await models.Students.findOne({
       where: { student_id },
       attributes: [
@@ -305,7 +299,17 @@ const getProfile = async (req: Request, res: Response) => {
     if (!student) throw new Error(messages.notFound);
 
     return response(res, 200, messages.studentRetrievedMessage, {
-      studentDetail: student,
+      studentDetails: {
+        surname: student.dataValues.surname,
+        othernames: student.dataValues.othernames,
+        email: student.dataValues.email,
+        phone: student.dataValues.phone,
+        gender: student.dataValues.gender,
+        dateOfBirth: student.dataValues.date_of_birth,
+        class: student.dataValues.class,
+        photo: student.dataValues.photo_url,
+        admissionNumber: student.dataValues.admission_number,
+      },
     });
   } catch (error: any) {
     return response(res, 400, error.message);
@@ -321,4 +325,5 @@ export {
   completeForgetPassword,
   getProfile,
   getSubjects,
+  changePassword,
 };
