@@ -12,6 +12,11 @@ const messages = {
   invalidCredentials: "Invalid Credentials",
   loginSuccess: "Login Success",
   userExists: "student with the email/username already exists",
+  subjectExists: "subject already exists in this class",
+  subjectCreated: "subjected created successfully",
+  classExists: "class already exists",
+  classCreated: "class created successfully",
+  deleteSubject: "subject deleted successfully",
   notFound: "student not found",
   userNotFound: "User not found",
   passwordLink: "password reset link successfully sent to your email addresss",
@@ -39,5 +44,6 @@ const messages = {
   passwordUpdatedSuccesfully: "Your Password has been updated successfully",
   passwordMisamtch:
     "Please create a new password diffent from your old password",
+  subjects: "subjects fetched successfully",
 };
 export default messages;

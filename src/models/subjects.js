@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       subject_id: DataTypes.UUID,
       subject_name: DataTypes.STRING,
-      class_id: DataTypes.UUID,
+      class_name: DataTypes.STRING,
     },
     {
       sequelize,

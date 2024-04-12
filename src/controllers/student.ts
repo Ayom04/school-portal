@@ -90,7 +90,6 @@ const createStudent = async (req: Request, res: Response) => {
 
     return response(res, 200, messages.updateStudent);
   } catch (error: any) {
-    console.log(error);
     return response(res, 400, error.message);
   }
 };
