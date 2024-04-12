@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import response from "../utils/response";
 import { v4 as uuidv4 } from "uuid";
 import { studentClassEnum } from "../constants/enum";
-import { where } from "sequelize";
 
 const createSubject = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
@@ -42,10 +41,12 @@ const getStudentSubjects = async (req: Request, res: Response) => {
     });
 
     const studentSubjects = await models.Subjects.findAll({
+      attributes: ["subject_name"],
       where: {
         class_name: student.dataValues.class,
       },
     });
+
     return response(res, 200, messages.subjects, studentSubjects);
   } catch (error: any) {
     return response(res, 400, error.message);
@@ -56,7 +57,12 @@ const getSubjects = async (req: Request, res: Response) => {
   const { admin_id, class_name } = req.params;
   try {
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
-    const subjects = await models.Subjects.findAll({ where: { class_name } });
+
+    const subjects = await models.Subjects.findAll({
+      attributes: ["subject_name", "class_name"],
+      where: { class_name },
+    });
+
     return response(res, 200, messages.subjects, subjects);
   } catch (error: any) {
     return response(res, 400, error.message);
@@ -67,6 +73,7 @@ const deleteSubject = async (req: Request, res: Response) => {
   const { admin_id, subject_name, class_name } = req.params;
   try {
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
+
     await models.Subjects.destroy({
       where: {
         [models.Sequelize.Op.and]: [

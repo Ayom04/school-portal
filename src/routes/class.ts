@@ -8,7 +8,7 @@ import { createClassSchema } from "../validations/class";
 import { createClass } from "../controllers/class";
 
 router.post(
-  "/create_class",
+  "/create-class",
   Authorization,
   checkAdmin,
   validationMiddleware(createClassSchema),

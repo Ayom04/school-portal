@@ -13,7 +13,7 @@ import {
 } from "../controllers/subject";
 
 router.post(
-  "/create_subject",
+  "/create-subject",
   Authorization,
   checkAdmin,
   validationMiddleware(createSubjectSchema),
@@ -21,7 +21,7 @@ router.post(
 );
 
 router.get(
-  "/student_subjects",
+  "/student-subjects",
   Authorization,
   authentication,
   getStudentSubjects
@@ -30,7 +30,7 @@ router.get(
 router.get("/subjects/:class_name", Authorization, checkAdmin, getSubjects);
 
 router.delete(
-  "/delete_subject/:subject_name/:class_name",
+  "/delete-subject/:subject_name/:class_name",
   Authorization,
   checkAdmin,
   deleteSubject
