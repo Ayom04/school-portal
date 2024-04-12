@@ -18,12 +18,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      class_id: {
-        type: Sequelize.UUID,
+      class_name: {
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
           model: "Classes",
-          key: "class_id",
+          key: "class_name",
         },
       },
       createdAt: {
