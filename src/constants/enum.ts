@@ -1,9 +1,3 @@
-const termEnum = {
-  first: 1,
-  second: 2,
-  third: 3,
-};
-
 const ADMISSION_STATUS = {
   PENDING: "pending",
   ADMITTED: "admitted",
@@ -17,5 +11,9 @@ const studentClassEnum = {
   SSS2: "SSS2",
   SSS3: "SSS3",
 };
-
+const termEnum = {
+  1: "First Term",
+  2: "Secont Term",
+  3: "Third Term",
+};
 export { termEnum, ADMISSION_STATUS, studentClassEnum };

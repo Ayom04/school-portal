@@ -45,5 +45,10 @@ const messages = {
   passwordMisamtch:
     "Please create a new password diffent from your old password",
   subjects: "subjects fetched successfully",
+  lessonExists: "lesson already exists",
+  lessonCreated: "lesson created successfully",
+  lessonFetch: "lessons fetched successfully",
+  lessonUpdated: "lesson updated successfully",
+  lessonDeleted: "lesson deleted successfully",
 };
 export default messages;

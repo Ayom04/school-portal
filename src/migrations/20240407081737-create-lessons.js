@@ -14,18 +14,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      title: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      class_id: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: "Classes",
-          key: "class_id",
-        },
-      },
       subject_id: {
         type: Sequelize.UUID,
         allowNull: false,
@@ -33,6 +21,18 @@ module.exports = {
           model: "Subjects",
           key: "subject_id",
         },
+      },
+      title: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      content: {
+        type: Sequelize.STRING(10000),
+        allowNull: false,
       },
       text_content: {
         type: Sequelize.STRING,

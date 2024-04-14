@@ -9,6 +9,7 @@ const checkAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const data = await models.Admins.findOne({
       where: { email: userEmail },
     });
+
     if (!data) throw new Error(messages.unauthorisedAccess);
     req.params.admin_id = data.admin_id;
     next();
