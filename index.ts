@@ -4,6 +4,7 @@ import messages from "./src/constants/messages";
 import response from "./src/utils/response";
 import cors from "cors";
 import logger from "./src/config/logger";
+import path from "path";
 
 import adminRoute from "./src/routes/admin";
 import registrationRoute from "./src/routes/registration";
@@ -18,6 +19,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the 'uploads' directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req: Request, res: Response) => {
   return response(res, 200, messages.welcomeMessage);

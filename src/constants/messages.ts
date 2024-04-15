@@ -50,5 +50,7 @@ const messages = {
   lessonFetch: "lessons fetched successfully",
   lessonUpdated: "lesson updated successfully",
   lessonDeleted: "lesson deleted successfully",
+  fileUploaded: "file uploaded successfully",
+  fileTypeNotSupportedMessage: "Unsupported file type",
 };
 export default messages;

@@ -131,3 +131,6 @@ dist
 
 #text files
 *.txt
+
+#ignore uploads
+uploads/

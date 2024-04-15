@@ -4,6 +4,8 @@ import validationMiddleware from "../middleware/validation";
 import Authorization from "../middleware/authorization";
 import authentication from "../middleware/authentication";
 import checkAdmin from "../middleware/admin";
+import upload from "../services/upload";
+import { uploadLesson } from "../controllers/upload";
 import {
   validateCreateLessionSchema,
   validateUpdateLessionSchema,
@@ -46,6 +48,14 @@ router.delete(
   Authorization,
   checkAdmin,
   deleteLesson
+);
+
+router.post(
+  "/upload-lesson/:lesson_id",
+  Authorization,
+  checkAdmin,
+  upload.single("file"),
+  uploadLesson
 );
 
 export default router;
