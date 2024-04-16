@@ -12,19 +12,6 @@ import {
   login,
   startForgetPassword,
   completeForgetPassword,
-  changePassword,
-  updateStudent,
-  deleteStudent,
-  getStudent,
-  getStudents,
-  createSubject,
-  updateSubject,
-  deleteSubject,
-  getSubject,
-  getSubjects,
-  getStudentSubjects,
-  getTeacherSubjects,
-  getTermCourses,
 } from "../controllers/admin";
 
 router.post(

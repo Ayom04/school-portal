@@ -109,7 +109,7 @@ const startForgetPassword = async (
 
     return response(res, 200, messages.passwordLink);
   } catch (error: any) {
-    return response(res, 400, error.message);
+    return response(res, 400, error.message || messages.serverError);
   }
 };
 
@@ -156,49 +156,8 @@ const completeForgetPassword = async (req: Request, res: Response) => {
     });
     return response(res, 200, messages.passwordReset);
   } catch (error: any) {
-    return response(res, 400, error.message);
+    return response(res, 400, error.message || messages.serverError);
   }
 };
 
-const changePassword = async (req: Request, res: Response) => {};
-
-const updateStudent = async (req: Request, res: Response) => {};
-const deleteStudent = async (req: Request, res: Response) => {};
-const getStudent = async (req: Request, res: Response) => {};
-const getStudents = async (req: Request, res: Response) => {};
-
-const createSubject = async (req: Request, res: Response) => {
-  const { subject_name, class_name } = req.body;
-  try {
-    console.log(subject_name, class_name);
-  } catch (error: any) {
-    return response(res, 500, messages.serverError, error);
-  }
-};
-const updateSubject = async (req: Request, res: Response) => {};
-const deleteSubject = async (req: Request, res: Response) => {};
-const getSubject = async (req: Request, res: Response) => {};
-const getSubjects = async (req: Request, res: Response) => {};
-const getStudentSubjects = async (req: Request, res: Response) => {};
-const getTeacherSubjects = async (req: Request, res: Response) => {};
-const getTermCourses = async (req: Request, res: Response) => {};
-
-export {
-  registerAdmin,
-  startForgetPassword,
-  completeForgetPassword,
-  changePassword,
-  login,
-  updateStudent,
-  deleteStudent,
-  getStudent,
-  getStudents,
-  createSubject,
-  updateSubject,
-  deleteSubject,
-  getSubject,
-  getSubjects,
-  getStudentSubjects,
-  getTeacherSubjects,
-  getTermCourses,
-};
+export { registerAdmin, startForgetPassword, completeForgetPassword, login };

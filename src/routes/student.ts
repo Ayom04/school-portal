@@ -18,8 +18,10 @@ import {
   startForgetPassword,
   completeForgetPassword,
   getProfile,
+  uploadPicture,
 } from "../controllers/student";
 import authentication from "../middleware/authentication";
+import upload from "../middleware/upload";
 
 router.post(
   "/create-student",
@@ -50,4 +52,13 @@ router.patch(
 );
 
 router.get("/profile", Authorization, authentication, getProfile);
+
+router.post(
+  "/upload-picture",
+  Authorization,
+  authentication,
+  upload.single("image"),
+  uploadPicture
+);
+
 export default router;

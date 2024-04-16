@@ -25,16 +25,13 @@ const messages = {
   emailNotSent:
     "And error occured during this operation, please try again later",
   otpExpired: "otp expired",
-  invalidPaymentReference: "Invalid transaction reference",
   amountError: "amount doesn't tally with calculated amount",
-  ordersFetch: "user orders fetched successfully",
-
   userDetailsMessage: "user details message",
-  deleteUser: "user deleted successfully",
   getRgisteredStudentMessage: "registered  students retrieved successfully",
   updateStudent: "student detail updated successfully",
   forbidden: "Sorry, unable to register",
   updated: "updated successfully",
+  fetched: "fetched successfully",
   serviceNotFound:
     "We're sorry, but it seems there was an issue processing your request. Please try again later or contact support for assistance.",
   complaint: "complaint sent successfully",
@@ -52,5 +49,11 @@ const messages = {
   lessonDeleted: "lesson deleted successfully",
   fileUploaded: "file uploaded successfully",
   fileTypeNotSupportedMessage: "Unsupported file type",
+  noFileUploaded: "No file uploaded",
+  lessonNotFound: "Lesson not found",
+  assessmentSubmitted:
+    "Congratulations! Your assessment has been successfully submitted.",
+  assessmentTakenMessage:
+    "Sorry, you've already taken this assessment and cannot retake it.",
 };
 export default messages;

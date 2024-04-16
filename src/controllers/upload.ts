@@ -6,7 +6,7 @@ import path from "path";
 
 const uploadLesson = async (req: Request, res: Response) => {
   const { lesson_id, admin_id } = req.params;
-
+  const { file } = req;
   try {
     if (!admin_id) throw new Error(messages.unauthorisedAccess);
 
@@ -18,13 +18,15 @@ const uploadLesson = async (req: Request, res: Response) => {
     if (!checkIfLessonExists) throw new Error(messages.lessonExists);
 
     // Check if file exists in request
-    if (!req.file) throw new Error("No file uploaded");
+    if (!file) throw new Error(messages.noFileUploaded);
 
     // File uploaded successfully
+    /** 
     const filePath = req.file.path;
-    const fileType = req.file.mimetype.split("/")[0]; // Extract file type (audio, text, video)
     const fileUrl = `http://localhost:${process.env.PORT}/${filePath}`; // Assuming your server is running locally
-    const fileName = path.basename(req.file.path);
+    */
+    const fileType = file.mimetype.split("/")[0]; // Extract file type (audio, text, video)
+    const fileName = path.basename(file.path);
 
     let updateFields = {};
     switch (fileType) {
@@ -45,9 +47,8 @@ const uploadLesson = async (req: Request, res: Response) => {
       where: { lesson_id },
     });
 
-    return response(res, 200, messages.fileUploaded, { fileUrl, fileType });
+    return response(res, 200, messages.fileUploaded);
   } catch (error: any) {
-    console.error("Error uploading file:", error);
     return response(res, 400, error.message);
   }
 };

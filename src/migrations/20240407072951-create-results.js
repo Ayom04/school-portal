@@ -22,20 +22,12 @@ module.exports = {
           key: "student_id",
         },
       },
-      class_id: {
+      lesson_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "Students",
-          key: "student_id",
-        },
-      },
-      subject_id: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: "Students",
-          key: "student_id",
+          model: "Lessons",
+          key: "lesson_id",
         },
       },
       examination_score: {
@@ -49,6 +41,15 @@ module.exports = {
       assessment_score: {
         type: Sequelize.DOUBLE(10, 2),
         allowNull: true,
+      },
+      assessment_url: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      is_assessment_reviewed: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
       term: {
         type: Sequelize.INTEGER,

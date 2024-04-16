@@ -12,6 +12,7 @@ import studentRoute from "./src/routes/student";
 import subjectRoute from "./src/routes/subject";
 import classRoute from "./src/routes/class";
 import lessonRoute from "./src/routes/lesson";
+import assessmentRoute from "./src/routes/assessment";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,7 @@ app.use("/api/v1/student", studentRoute);
 app.use("/api/v1/subject", subjectRoute);
 app.use("/api/v1/class", classRoute);
 app.use("/api/v1/lesson", lessonRoute);
+app.use("/api/v1/assessment", assessmentRoute);
 
 app.use((req: Request, res: Response) => {
   response(res, 404, messages.invalidRoute);

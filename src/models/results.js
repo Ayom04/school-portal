@@ -15,8 +15,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       result_id: DataTypes.UUID,
       student_id: DataTypes.UUID,
-      class_id: DataTypes.UUID,
-      subject_id: DataTypes.UUID,
+      lesson_id: DataTypes.UUID,
+      assessment_url: DataTypes.STRING,
+      is_assessment_reviewed: DataTypes.BOOLEAN,
       examination_score: DataTypes.DOUBLE(10, 2),
       test_score: DataTypes.DOUBLE(10, 2),
       assessment_score: DataTypes.DOUBLE(10, 2),

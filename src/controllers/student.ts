@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
+import path from "path";
 import {
   hashPassword,
   comparePassword,
@@ -315,7 +316,33 @@ const getProfile = async (req: Request, res: Response) => {
   }
 };
 
-const getSubjects = async (req: Request, res: Response) => {};
+const uploadPicture = async (req: Request, res: Response) => {
+  const { student_id } = req.params;
+  const { file } = req;
+  try {
+    if (!student_id) throw new Error(messages.unauthorisedAccess);
+
+    if (!file) throw new Error(messages.noFileUploaded);
+
+    if (file.mimetype.split("/")[0] !== "image")
+      throw new Error(messages.fileTypeNotSupportedMessage);
+
+    const fileName = path.basename(file.path);
+
+    await models.Students.update(
+      {
+        photo_url: fileName,
+      },
+      {
+        where: { student_id },
+      }
+    );
+
+    return response(res, 200, messages.fileUploaded);
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
 
 export {
   createStudent,
@@ -323,6 +350,6 @@ export {
   startForgetPassword,
   completeForgetPassword,
   getProfile,
-  getSubjects,
   changePassword,
+  uploadPicture,
 };
