@@ -28,7 +28,7 @@ router.get(
 );
 
 router.patch(
-  "/grade-assessment/:student_id",
+  "/grade-assessment/:student_id/:lesson_id",
   Authorization,
   checkAdmin,
   validationMiddleware(validateGradeStudentSchema),
