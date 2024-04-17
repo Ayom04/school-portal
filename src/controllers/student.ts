@@ -105,20 +105,19 @@ const login = async (req: Request, res: Response) => {
       },
     });
 
-    if (!student) throw new Error(messages.invalidCredentials);
+    const checkPasssword = await comparePassword(
+      password,
+      student.dataValues.password_hash
+    );
+
+    if (!student || !checkPasssword)
+      throw new Error(messages.invalidCredentials);
 
     if (!student.dataValues.is_password_changed) {
       return res.redirect(
         `${process.env.PASSWORD_CHANGE_URL}?admissionNumber=${student.dataValues.admission_number}`
       );
     }
-
-    const checkPasssword = await comparePassword(
-      password,
-      student.dataValues.password_hash
-    );
-
-    if (!checkPasssword) throw new Error(messages.invalidCredentials);
 
     const token = jwt.sign(
       {
@@ -153,6 +152,8 @@ const startForgetPassword = async (
 
     if (!student) throw new Error(messages.invalidCredentials);
 
+    if (!student.dataValues.is_password_changed)
+      throw new Error(messages.unauthorizedPermission);
     const otp = generateOtp(6);
     const _otp = await models.Otps.findOne({
       where: { email_or_admssionNumber: admissionNumber },
