@@ -154,10 +154,13 @@ const startForgetPassword = async (
 
     if (!student.dataValues.is_password_changed)
       throw new Error(messages.unauthorizedPermission);
+
     const otp = generateOtp(6);
+
     const _otp = await models.Otps.findOne({
       where: { email_or_admssionNumber: admissionNumber },
     });
+
     if (!_otp) {
       await models.Otps.create({
         otp_id: uuidv4(),
@@ -165,6 +168,7 @@ const startForgetPassword = async (
         email_or_admssionNumber: admissionNumber,
       });
     }
+
     const { hash } = await hashPassword(String(otp));
 
     const link = `${process.env.STUDENT_RESET_PASSWORD_URL}?email=${admissionNumber}&otp=${hash}`;
