@@ -1,2 +1,2 @@
 # school-portal
-School portal for student of a Secondary school.
+School portal for students of a Secondary school.
