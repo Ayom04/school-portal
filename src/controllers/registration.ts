@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import messages from "../constants/messages";
 import response from "../utils/response";
 import { studentClassEnum } from "../constants/enum";
+import { where } from "sequelize";
 const models = require("../models");
 
 const registerStudent = async (req: Request, res: Response) => {
@@ -32,6 +33,11 @@ const registerStudent = async (req: Request, res: Response) => {
       },
     });
     if (checkIfStudentExists) throw new Error(messages.pendindAdmission);
+
+    const checkStudentRecord = await models.Students.findOne({
+      where: { email },
+    });
+    if (checkStudentRecord) throw new Error(messages.registration);
 
     await models.Registrations.create({
       registration_id: uuidv4(),

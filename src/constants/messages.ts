@@ -18,6 +18,7 @@ const messages = {
   classCreated: "class created successfully",
   deleteSubject: "subject deleted successfully",
   notFound: "student not found",
+  registration: "student cannot register more than once",
   userNotFound: "User not found",
   passwordLink: "password reset link successfully sent to your email addresss",
   invalidOtp: "otp is not valid",
