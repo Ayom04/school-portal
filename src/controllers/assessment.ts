@@ -74,15 +74,33 @@ const getUnreviewedAssessment = async (req: Request, res: Response) => {
     //   ],
     // });
     const unreviewedAssessment = await sequelize.query(
-      "SELECT `Results`.`id`, `Results`.`result_id`, `Results`.`lesson_id`,\
-      `Results`.`student_id`, `Results`.`assessment_url`, `Results`.`createdAt`,\
-      `Lesson`.`id` AS `Lesson.id`, `Lesson`.`lesson_id` AS `Lesson.lesson_id`,\
-      `Lesson`.`title` AS `Lesson.title`, `Student`.`id` AS `Student.id`, \
-      `Student`.`student_id` AS `Student.student_id`, `Student`.`surname` AS `Student.surname`,\
-      `Student`.`othernames` AS `Student.othernames`, `Student`.`class` AS `Student.class` FROM\
-      `Results` AS `Results` LEFT OUTER JOIN `Lessons` AS `Lesson` ON \
-      `Results`.`lesson_id` = `Lesson`.`lesson_id` LEFT OUTER JOIN `Students` AS `Student` ON \
-      `Results`.`student_id` = `Student`.`student_id` WHERE `Results`.`is_assessment_reviewed` = false;"
+      `SELECT 
+        Results.id, 
+        Results.result_id, 
+        Results.lesson_id, 
+        Results.student_id, 
+        Results.assessment_url, 
+        Results.createdAt, 
+        Lesson.id AS Lesson_id, 
+        Lesson.lesson_id AS Lesson_lesson_id, 
+        Lesson.title AS Lesson_title, 
+        Student.id AS Student_id, 
+        Student.student_id AS Student_student_id, 
+        Student.surname AS Student_surname, 
+        Student.othernames AS Student_othernames, 
+        Student.class AS Student_class 
+      FROM 
+        Results AS Results 
+      LEFT OUTER JOIN 
+        Lessons AS Lesson 
+      ON 
+        Results.lesson_id = Lesson.lesson_id 
+      LEFT OUTER JOIN 
+        Students AS Student 
+      ON 
+        Results.student_id = Student.student_id 
+      WHERE 
+        Results.is_assessment_reviewed = false;`
     );
 
     return response(res, 200, messages.fetched, unreviewedAssessment);

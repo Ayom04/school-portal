@@ -13,6 +13,9 @@ import subjectRoute from "./src/routes/subject";
 import classRoute from "./src/routes/class";
 import lessonRoute from "./src/routes/lesson";
 import assessmentRoute from "./src/routes/assessment";
+import Authorization from "./src/middleware/authorization";
+import authentication from "./src/middleware/authentication";
+import checkAdmin from "./src/middleware/admin";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
@@ -22,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'uploads' directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/v1/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req: Request, res: Response) => {
   return response(res, 200, messages.welcomeMessage);

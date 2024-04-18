@@ -15,7 +15,8 @@ import messages from "../constants/messages";
 import { readFileAndSendEmail } from "../services/email";
 import { ADMISSION_STATUS } from "../constants/enum";
 import { deleteRegistration } from "../utils";
-import { where } from "sequelize";
+import { QueryTypes, where } from "sequelize";
+const { sequelize } = require("../models");
 
 const createStudent = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
@@ -107,7 +108,7 @@ const login = async (req: Request, res: Response) => {
 
     const checkPasssword = await comparePassword(
       password,
-      student.dataValues.password_hash
+      student.password_hash
     );
 
     if (!student || !checkPasssword)
@@ -349,6 +350,65 @@ const uploadPicture = async (req: Request, res: Response) => {
   }
 };
 
+const getStudentProfile = async (req: Request, res: Response) => {
+  const { student_id } = req.params;
+
+  try {
+    const student = await models.Students.findOne({
+      where: { student_id },
+      attributes: {
+        exclude: [
+          "id",
+          "password_hash",
+          "createdAt",
+          "updatedAt",
+          "is_deleted",
+          "is_password_changed",
+        ],
+      },
+    });
+    const subjects = await sequelize.query(
+      `SELECT 
+        Subjects.id,
+        Subjects.subject_id,
+        Subjects.subject_name,
+        Subjects.class_name,
+        Subjects.createdAt,
+        Subjects.updatedAt,
+        Lessons.id AS Lessons_id,
+        Lessons.lesson_id AS Lessons_lesson_id,
+        Lessons.title AS Lessons_title,
+        Lessons.subject_id AS Lessons_subject_id,
+        Lessons.description AS Lessons_description,
+        Lessons.content AS Lessons_content,
+        Lessons.text_content AS Lessons_text_content,
+        Lessons.video_url AS Lessons_video_url,
+        Lessons.audio_url AS Lessons_audio_url,
+        Lessons_Results.id AS Lessons_Results_id,
+        Lessons_Results.assessment_url AS Lessons_Results_assessment_url,
+        Lessons_Results.assessment_score AS Lessons_Results_assessment_score 
+      FROM 
+        Subjects 
+      LEFT OUTER JOIN (
+        Lessons 
+        INNER JOIN Results AS Lessons_Results 
+        ON Lessons.lesson_id = Lessons_Results.lesson_id 
+          AND Lessons_Results.student_id = :student_id
+      ) ON Subjects.subject_id = Lessons.subject_id 
+      WHERE 
+        Subjects.class_name = 'SSS3';`,
+      {
+        type: QueryTypes.SELECT,
+        replacements: { student_id },
+      }
+    );
+
+    return response(res, 200, messages.fetched, { student, subjects });
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
+
 export {
   createStudent,
   login,
@@ -357,4 +417,5 @@ export {
   getProfile,
   changePassword,
   uploadPicture,
+  getStudentProfile,
 };

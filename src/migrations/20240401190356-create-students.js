@@ -68,10 +68,9 @@ module.exports = {
         type: Sequelize.ENUM,
         values: ["male", "female", "others"],
       },
-      class: {
+      class_name: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "JSS1",
       },
       createdAt: {
         allowNull: false,

@@ -11,6 +11,7 @@ import {
 } from "../validations/student";
 import Authorization from "../middleware/authorization";
 import checkAdmin from "../middleware/admin";
+
 import {
   changePassword,
   createStudent,
@@ -19,6 +20,7 @@ import {
   completeForgetPassword,
   getProfile,
   uploadPicture,
+  getStudentProfile,
 } from "../controllers/student";
 import authentication from "../middleware/authentication";
 import upload from "../middleware/upload";
@@ -51,7 +53,9 @@ router.patch(
   completeForgetPassword
 );
 
-router.get("/profile", Authorization, authentication, getProfile);
+// router.get("/profile", Authorization, authentication, getProfile);
+
+router.get("/profile", Authorization, authentication, getStudentProfile);
 
 router.post(
   "/upload-picture",

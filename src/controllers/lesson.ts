@@ -93,11 +93,24 @@ const getStudentLesson = async (req: Request, res: Response) => {
     if (!student) throw new Error(messages.notFound);
 
     const lessons = await sequelize.query(
-      `SELECT title, description, content, text_content, video_url, audio_url, term,subject_name,class_name
-       FROM Lessons
-       INNER JOIN Subjects ON Lessons.subject_id = Subjects.subject_id
-       WHERE Subjects.class_name = '${student.dataValues.class}';
-      `,
+      `SELECT 
+        title, 
+        description, 
+        content, 
+        text_content, 
+        video_url, 
+        audio_url, 
+        term, 
+        subject_name, 
+        class_name
+      FROM 
+        Lessons
+      INNER JOIN 
+        Subjects
+      ON 
+        Lessons.subject_id = Subjects.subject_id
+      WHERE 
+        Subjects.class_name = '${student.dataValues.class}';`,
       {
         type: QueryTypes.SELECT,
       }
@@ -115,14 +128,28 @@ const getLessons = async (req: Request, res: Response) => {
     if (!admin_id) throw new Error(messages.unauthorisedAccess);
 
     const lessons = await sequelize.query(
-      `SELECT lesson_id, title, description, content, text_content, video_url, audio_url, term,subject_name,class_name
-       FROM Lessons
-       INNER JOIN Subjects ON Lessons.subject_id = Subjects.subject_id
-      `,
+      `SELECT
+        lesson_id,
+        title,
+        description,
+        content,
+        text_content,
+        video_url,
+        audio_url,
+        term,
+        subject_name,
+        class_name
+      FROM
+        Lessons
+      INNER JOIN
+        Subjects
+      ON
+        Lessons.subject_id = Subjects.subject_id`,
       {
         type: QueryTypes.SELECT,
       }
     );
+
     return response(res, 200, messages.lessonFetch, lessons);
   } catch (error: any) {
     console.log("error: ", error);
@@ -143,4 +170,10 @@ const deleteLesson = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
-export { createLesson, getLessons, getStudentLesson, updateLesson,deleteLesson };
+export {
+  createLesson,
+  getLessons,
+  getStudentLesson,
+  updateLesson,
+  deleteLesson,
+};
