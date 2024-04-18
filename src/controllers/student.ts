@@ -16,6 +16,7 @@ import { readFileAndSendEmail } from "../services/email";
 import { ADMISSION_STATUS } from "../constants/enum";
 import { deleteRegistration } from "../utils";
 import { QueryTypes, where } from "sequelize";
+import { any } from "joi";
 const { sequelize } = require("../models");
 
 const createStudent = async (req: Request, res: Response) => {
@@ -374,34 +375,28 @@ const getStudentProfile = async (req: Request, res: Response) => {
     );
     const subjects = await sequelize.query(
       `SELECT 
-        Subjects.id,
+        Subjects.id AS subject_id,
         Subjects.subject_id,
         Subjects.subject_name,
         Subjects.class_name,
-        Lessons.id AS Lessons_id,
-        Lessons.lesson_id AS Lessons_lesson_id,
-        Lessons.title AS Lessons_title,
-        Lessons.subject_id AS Lessons_subject_id,
-        Lessons.description AS Lessons_description,
-        Lessons.content AS Lessons_content,
-        Lessons.text_content AS Lessons_text_content,
-        Lessons.video_url AS Lessons_video_url,
-        Lessons.audio_url AS Lessons_audio_url,
-        Lessons_Results.id AS Lessons_Results_id,
-        Lessons_Results.assessment_url AS Lessons_Results_assessment_url,
-        Lessons_Results.assessment_score AS Lessons_Results_assessment_score 
+        Lessons.id AS lesson_id,
+        Lessons.title AS lesson_title,
+        Lessons.description AS lesson_description,
+        Lessons.content AS lesson_content,
+        Lessons.text_content AS lesson_text_content,
+        Lessons.video_url AS lesson_video_url,
+        Lessons.audio_url AS lesson_audio_url,
+        Lessons_Results.id AS lesson_result_id,
+        Lessons_Results.assessment_url AS lesson_result_assessment_url,
+        Lessons_Results.assessment_score AS lesson_result_assessment_score 
       FROM 
         Subjects 
-      LEFT OUTER JOIN (
-        Lessons 
-        INNER JOIN Results AS Lessons_Results 
-        ON Lessons.lesson_id = Lessons_Results.lesson_id 
-          AND Lessons_Results.student_id = :student_id
-      ) ON Subjects.subject_id = Lessons.subject_id 
+      LEFT OUTER JOIN Lessons ON Subjects.subject_id = Lessons.subject_id
+      LEFT OUTER JOIN Results AS Lessons_Results ON Lessons.lesson_id = Lessons_Results.lesson_id
       WHERE 
         Subjects.class_name = 'SSS3'
-      GROUP BY
-        Subjects.subject_name;`,
+      ORDER BY
+        Subjects.subject_name, Lessons.title`,
       {
         type: QueryTypes.SELECT,
         replacements: { student_id },
@@ -409,7 +404,70 @@ const getStudentProfile = async (req: Request, res: Response) => {
       }
     );
 
-    return response(res, 200, messages.fetched, { student, subjects });
+    // Organize subjects, lessons, and assessment results
+    const subjectsArray: {
+      subject_id: any;
+      subject_name: any;
+      class_name: any;
+      lessons: any[]; // Change 'never[]' to 'any[]'
+    }[] = [];
+    let currentSubject: {
+      subject_id: any;
+      subject_name: any; // Ensure 'subject_name' is always present
+      class_name: any;
+      lessons: any[];
+    } | null = null;
+    subjects.forEach(
+      (row: {
+        subject_id: any;
+        subject_name: any;
+        class_name: any;
+        lesson_id: any;
+        lesson_title: any;
+        lesson_description: any;
+        lesson_content: any;
+        lesson_text_content: any;
+        lesson_video_url: any;
+        lesson_audio_url: any;
+        lesson_result_id: any;
+        lesson_result_assessment_url: any;
+        lesson_result_assessment_score: any;
+      }) => {
+        if (!currentSubject || currentSubject.subject_id !== row.subject_id) {
+          currentSubject = {
+            subject_id: row.subject_id,
+            subject_name: row.subject_name,
+            class_name: row.class_name,
+            lessons: [],
+          };
+          subjectsArray.push(currentSubject);
+        }
+        if (row.lesson_id) {
+          const lesson = {
+            lesson_id: row.lesson_id,
+            title: row.lesson_title,
+            description: row.lesson_description,
+            content: row.lesson_content,
+            text_content: row.lesson_text_content,
+            video_url: row.lesson_video_url,
+            audio_url: row.lesson_audio_url,
+            assessment_result: {
+              id: row.lesson_result_id,
+              assessment_url: row.lesson_result_assessment_url,
+              assessment_score: row.lesson_result_assessment_score,
+            },
+          };
+          currentSubject.lessons.push(lesson);
+        }
+      }
+    );
+
+    // subjectsArray now contains subjects with lessons and assessment results
+
+    return response(res, 200, messages.fetched, {
+      student,
+      subjects: subjectsArray,
+    });
   } catch (error: any) {
     return response(res, 400, error.message);
   }
