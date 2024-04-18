@@ -68,10 +68,6 @@ module.exports = {
         type: Sequelize.ENUM,
         values: ["male", "female", "others"],
       },
-      class_name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
