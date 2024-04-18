@@ -367,14 +367,17 @@ const getStudentProfile = async (req: Request, res: Response) => {
         ],
       },
     });
+    //to use group by
+    await sequelize.query(
+      `SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));`,
+      { raw: true }
+    );
     const subjects = await sequelize.query(
       `SELECT 
         Subjects.id,
         Subjects.subject_id,
         Subjects.subject_name,
         Subjects.class_name,
-        Subjects.createdAt,
-        Subjects.updatedAt,
         Lessons.id AS Lessons_id,
         Lessons.lesson_id AS Lessons_lesson_id,
         Lessons.title AS Lessons_title,
@@ -396,10 +399,13 @@ const getStudentProfile = async (req: Request, res: Response) => {
           AND Lessons_Results.student_id = :student_id
       ) ON Subjects.subject_id = Lessons.subject_id 
       WHERE 
-        Subjects.class_name = 'SSS3';`,
+        Subjects.class_name = 'SSS3'
+      GROUP BY
+        Subjects.subject_name;`,
       {
         type: QueryTypes.SELECT,
         replacements: { student_id },
+        raw: true,
       }
     );
 
