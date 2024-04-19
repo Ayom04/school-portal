@@ -20,28 +20,29 @@ import checkAdmin from "./src/middleware/admin";
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
-const corsOptions = {
-  origin: (origin: any, callback: any) => {
-    // Check if the origin matches any of the patterns
-    if (
-      !origin ||
-      allowedOriginPatterns.some((pattern) => pattern.test(origin))
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: (origin: any, callback: any) => {
+//     // Check if the origin matches any of the patterns
+//     if (
+//       !origin ||
+//       allowedOriginPatterns.some((pattern) => pattern.test(origin))
+//     ) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true,
+// };
 
 //middlewares
-const allowedOriginPatterns = [
-  /http:\/\/localhost:3000$/,
-  /http:\/\/localhost:5173$/,
-  /^https:\/\/school-website-rouge-two\.vercel\.app/,
-];
-app.use(cors(corsOptions));
+// const allowedOriginPatterns = [
+//   /http:\/\/localhost:3000$/,
+//   /http:\/\/localhost:5173$/,
+//   /^https:\/\/school-website-rouge-two\.vercel\.app/,
+// ];
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
