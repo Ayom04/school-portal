@@ -158,8 +158,8 @@ const startForgetPassword = async (
 
     if (!student) throw new Error(messages.invalidCredentials);
 
-    if (!student.dataValues.is_password_changed)
-      throw new Error(messages.unauthorizedPermission);
+    // if (!student.dataValues.is_password_changed)
+    //   throw new Error(messages.unauthorizedPermission);
 
     const otp = generateOtp(6);
 
