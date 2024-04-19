@@ -63,7 +63,11 @@ const getRegisteredStudents = async (req: Request, res: Response) => {
   try {
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
 
-    const students = await models.Registrations.findAll();
+    const students = await models.Registrations.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "id", "registration_id"],
+      },
+    });
     if (!students) throw new Error(messages.notFound);
 
     return response(res, 200, messages.getRgisteredStudentMessage, students);

@@ -118,6 +118,8 @@ const login = async (req: Request, res: Response) => {
       throw new Error(messages.invalidCredentials);
 
     if (!student.dataValues.is_password_changed) {
+      res.set("Access-Control-Allow-Origin", process.env.PASSWORD_CHANGE_URL);
+
       return res.redirect(
         `${process.env.PASSWORD_CHANGE_URL}?admissionNumber=${student.dataValues.admission_number}`
       );
