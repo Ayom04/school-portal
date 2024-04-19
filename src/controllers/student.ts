@@ -107,6 +107,8 @@ const login = async (req: Request, res: Response) => {
       },
     });
 
+    if (!student) throw new Error(messages.invalidCredentials);
+
     const checkPasssword = await comparePassword(
       password,
       student.password_hash
