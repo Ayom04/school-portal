@@ -48,7 +48,7 @@ const updateLesson = async (req: Request, res: Response) => {
   const { admin_id, lesson_id } = req.params;
 
   const {
-    title,
+    topic,
     description,
     content,
     text_content,
@@ -67,12 +67,13 @@ const updateLesson = async (req: Request, res: Response) => {
 
     await models.Lessons.update(
       {
-        title,
+        title: topic,
         description,
         content: JSON.stringify(content),
         text_content,
         video_url,
         audio_url,
+        term,
       },
       {
         where: { lesson_id },
