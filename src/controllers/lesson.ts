@@ -10,7 +10,7 @@ const createLesson = async (req: Request, res: Response) => {
   const { admin_id, subject_id } = req.params;
 
   const {
-    title,
+    topic,
     description,
     content,
     text_content,
@@ -22,14 +22,14 @@ const createLesson = async (req: Request, res: Response) => {
   if (!admin_id) throw new Error(messages.unauthorisedAccess);
   try {
     const checkIfTopicExists = await models.Lessons.findOne({
-      where: { subject_id, title },
+      where: { subject_id, title: topic },
     });
 
     if (checkIfTopicExists) throw new Error(messages.lessonExists);
 
     await models.Lessons.create({
       lesson_id: uuidv4(),
-      title,
+      title: topic,
       description,
       subject_id,
       content: JSON.stringify(content),

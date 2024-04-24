@@ -1,7 +1,7 @@
 import Joi from "joi";
 
-const validateCreateLessionSchema = Joi.object({
-  title: Joi.string().required().messages({
+const validateCreateLessonSchema = Joi.object({
+  topic: Joi.string().required().messages({
     "string.empty": "Title is required",
     "any.required": "Title is required",
   }),
@@ -25,15 +25,17 @@ const validateCreateLessionSchema = Joi.object({
     "string.empty": "Audio URL is required",
     "any.required": "Audio URL is required",
   }),
-  term: Joi.number().integer().valid(1, 2, 3).required().messages({
-    "number.base": "Term must be a number",
-    "number.integer": "Term must be an integer",
-    "any.only": "Term must be 1, 2 or 3",
-  }),
+  term: Joi.string()
+    .valid("FirstTerm", "SecondTerm", "ThirdTerm")
+    .required()
+    .messages({
+      "string.empty": "Term is required",
+      "any.required": "Term is required",
+    }),
 });
-const validateUpdateLessionSchema = Joi.object({
-  title: Joi.string().messages({
-    "string.empty": "Title is required",
+const validateUpdateLessonSchema = Joi.object({
+  topic: Joi.string().messages({
+    "string.empty": "Topic is required",
   }),
   description: Joi.string().messages({
     "string.empty": "Description is required",
@@ -54,6 +56,10 @@ const validateUpdateLessionSchema = Joi.object({
     "string.empty": "Audio URL is required",
     "any.required": "Audio URL is required",
   }),
+  term: Joi.string().valid("FirstTerm", "SecondTerm", "ThirdTerm").messages({
+    "string.empty": "Term is required",
+    "any.required": "Term is required",
+  }),
 });
 
-export { validateCreateLessionSchema, validateUpdateLessionSchema };
+export { validateCreateLessonSchema, validateUpdateLessonSchema };

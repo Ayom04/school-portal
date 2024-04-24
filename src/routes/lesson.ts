@@ -7,8 +7,8 @@ import checkAdmin from "../middleware/admin";
 import upload from "../middleware/upload";
 import { uploadLesson } from "../controllers/upload";
 import {
-  validateCreateLessionSchema,
-  validateUpdateLessionSchema,
+  validateCreateLessonSchema,
+  validateUpdateLessonSchema,
 } from "../validations/lesson";
 import {
   createLesson,
@@ -22,7 +22,7 @@ router.post(
   "/create-lesson/:subject_id",
   Authorization,
   checkAdmin,
-  validationMiddleware(validateCreateLessionSchema),
+  validationMiddleware(validateCreateLessonSchema),
   createLesson
 );
 
@@ -30,7 +30,7 @@ router.patch(
   "/update-lesson/:lesson_id",
   Authorization,
   checkAdmin,
-  validationMiddleware(validateUpdateLessionSchema),
+  validationMiddleware(validateUpdateLessonSchema),
   updateLesson
 );
 
