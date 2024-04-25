@@ -59,7 +59,7 @@ const getSubjects = async (req: Request, res: Response) => {
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
 
     const subjects = await models.Subjects.findAll({
-      attributes: ["subject_name", "class_name"],
+      attributes: ["subject_name", "class_name", "subject_id"],
       where: { class_name },
     });
 
