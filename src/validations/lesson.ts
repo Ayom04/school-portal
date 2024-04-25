@@ -25,13 +25,10 @@ const validateCreateLessonSchema = Joi.object({
     "string.empty": "Audio URL is required",
     "any.required": "Audio URL is required",
   }),
-  term: Joi.string()
-    .valid("FirstTerm", "SecondTerm", "ThirdTerm")
-    .required()
-    .messages({
-      "string.empty": "Term is required",
-      "any.required": "Term is required",
-    }),
+  term: Joi.number().valid(1, 2, 3).required().messages({
+    "string.empty": "Term is required",
+    "any.required": "Term is required",
+  }),
 });
 const validateUpdateLessonSchema = Joi.object({
   topic: Joi.string().messages({
@@ -56,7 +53,7 @@ const validateUpdateLessonSchema = Joi.object({
     "string.empty": "Audio URL is required",
     "any.required": "Audio URL is required",
   }),
-  term: Joi.string().valid("FirstTerm", "SecondTerm", "ThirdTerm").messages({
+  term: Joi.number().valid(1, 2, 3).messages({
     "string.empty": "Term is required",
     "any.required": "Term is required",
   }),
