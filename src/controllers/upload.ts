@@ -15,7 +15,7 @@ const uploadLesson = async (req: Request, res: Response) => {
       where: { lesson_id },
     });
 
-    if (!checkIfLessonExists) throw new Error(messages.lessonExists);
+    if (!checkIfLessonExists) throw new Error("Invalid Lesson identifier");
 
     // Check if file exists in request
     if (!file) throw new Error(messages.noFileUploaded);
