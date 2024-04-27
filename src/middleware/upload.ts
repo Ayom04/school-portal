@@ -13,9 +13,25 @@ if (!fs.existsSync(uploadDir)) {
 // Define allowed file types
 const allowedTypes = ["video", "audio", "application", "images"];
 
-const storage = multer.diskStorage({
+const storageForFiles = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "../../uploads/"));
+  },
+  filename: function (req: Request, file:any, cb) {
+    // console.log("file: " +file);
+    const fileType = file.mimetype.split("/")[0];
+    const timestamp = Date.now();
+    const fileName = `${fileType}_${timestamp}_${file.originalname}`;
+    // console.log("fileName: " + fileName);
+    // if (!allowedTypes.includes(fileType)) {
+    //   return response(res:Response, 400, "Invalid file type");
+    // }
+    cb(null, fileName);
+  },
+});
+const storageForImages = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../../uploads/images/"));
   },
   filename: function (req: Request, file, cb) {
     const fileType = file.mimetype.split("/")[0];
@@ -29,6 +45,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const uploadLessonContent = multer({ storage: storageForFiles });
+const uploadImage = multer({ storage: storageForImages });
 
-export default upload;
+export  {uploadLessonContent, uploadImage};

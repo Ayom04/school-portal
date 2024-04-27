@@ -2,8 +2,8 @@ import Joi from "joi";
 
 const validateCreateLessonSchema = Joi.object({
   topic: Joi.string().required().messages({
-    "string.empty": "Title is required",
-    "any.required": "Title is required",
+    "string.empty": "Topic is required",
+    "any.required": "Topic is required",
   }),
   description: Joi.string().messages({
     "string.empty": "Description is required",
@@ -13,11 +13,11 @@ const validateCreateLessonSchema = Joi.object({
     "array.empty": "Content is required",
     "any.required": "Content is required",
   }),
-  text_content: Joi.string().messages({
+  text_content: Joi.string().required().messages({
     "string.empty": "Text content is required",
     "any.required": "Text content is required",
   }),
-  video_url: Joi.string().messages({
+  video_url: Joi.string().required().messages({
     "string.empty": "Video URL is required",
     "any.required": "Video URL is required",
   }),

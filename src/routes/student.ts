@@ -23,7 +23,7 @@ import {
   getStudentProfile,
 } from "../controllers/student";
 import authentication from "../middleware/authentication";
-import upload from "../middleware/upload";
+import {uploadImage} from "../middleware/upload";
 
 router.post(
   "/create-student",
@@ -61,7 +61,7 @@ router.post(
   "/upload-picture",
   Authorization,
   authentication,
-  upload.single("image"),
+  uploadImage.single("image"),
   uploadPicture
 );
 
