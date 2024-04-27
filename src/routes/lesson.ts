@@ -4,8 +4,7 @@ import validationMiddleware from "../middleware/validation";
 import Authorization from "../middleware/authorization";
 import authentication from "../middleware/authentication";
 import checkAdmin from "../middleware/admin";
-import upload from "../middleware/upload";
-import { uploadLesson } from "../controllers/upload";
+import { uploadLessonContent } from "../middleware/upload";
 import {
   validateCreateLessonSchema,
   validateUpdateLessonSchema,
@@ -16,6 +15,7 @@ import {
   getLessons,
   getStudentLesson,
   updateLesson,
+  uploadLesson,
 } from "../controllers/lesson";
 
 router.post(
@@ -51,10 +51,10 @@ router.delete(
 );
 
 router.post(
-  "/upload-lesson/:lesson_id",
+  "/upload-lesson",
   Authorization,
   checkAdmin,
-  upload.single("file"),
+  uploadLessonContent.array("file", 3),
   uploadLesson
 );
 
