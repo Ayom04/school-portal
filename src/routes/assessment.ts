@@ -4,7 +4,7 @@ import validationMiddleware from "../middleware/validation";
 import Authorization from "../middleware/authorization";
 import authentication from "../middleware/authentication";
 import checkAdmin from "../middleware/admin";
-import {uploadLessonContent} from "../middleware/upload";
+import { uploadLessonContent } from "../middleware/upload";
 import {
   submitAssessment,
   getUnreviewedAssessment,

@@ -5,10 +5,13 @@ import {
   registerStudent,
   getRegisteredStudents,
   deletePendingRegistrations,
+  uploadPicture,
 } from "../controllers/registration";
 import { registrationSchema } from "../validations/registration";
 import Authorization from "../middleware/authorization";
 import checkAdmin from "../middleware/admin";
+import authentication from "../middleware/authentication";
+import { uploadImage } from "../middleware/upload";
 
 router.post(
   "/register-student",
@@ -29,5 +32,6 @@ router.delete(
   checkAdmin,
   deletePendingRegistrations
 );
+router.post("/upload-picture", uploadImage.single("image"), uploadPicture);
 
 export default router;
