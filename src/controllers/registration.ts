@@ -5,6 +5,7 @@ import response from "../utils/response";
 import { studentClassEnum } from "../constants/enum";
 import { where } from "sequelize";
 const models = require("../models");
+import path from "path";
 
 const registerStudent = async (req: Request, res: Response) => {
   const {
@@ -93,5 +94,25 @@ const deletePendingRegistrations = async (req: Request, res: Response) => {
     return response(res, 400, error.message);
   }
 };
+const uploadPicture = async (req: Request, res: Response) => {
+  const { student_id } = req.params;
+  const { file } = req;
+  try {
+    if (!file) throw new Error(messages.noFileUploaded);
 
-export { deletePendingRegistrations, getRegisteredStudents, registerStudent };
+    if (file.mimetype.split("/")[0] !== "image")
+      throw new Error(messages.fileTypeNotSupportedMessage);
+
+    const fileName = path.basename(file.path);
+
+    return response(res, 200, messages.fileUploaded, { photo_url: fileName });
+  } catch (error: any) {
+    return response(res, 400, error.message);
+  }
+};
+export {
+  deletePendingRegistrations,
+  getRegisteredStudents,
+  registerStudent,
+  uploadPicture,
+};
