@@ -29,9 +29,8 @@ const registrationSchema = Joi.object({
     "string.empty": "gender is required",
     "any.only": "Invalid Gender, please select from male, female , others",
   }),
-  photo_url: Joi.string().required().messages({
+  photo_url: Joi.string().messages({
     "string.empty": "Photo is required",
-    "any.required": "Photo is required",
   }),
 });
 
