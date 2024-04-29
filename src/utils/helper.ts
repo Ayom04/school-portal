@@ -82,7 +82,7 @@ const generateMatricNumber = async (): Promise<string> => {
   fs.writeFileSync("autoIncrement.txt", autoIncrement.toString(), "utf8");
 
   const matricNumber: string = `${process.env.SCHOOL_NAME_SHORT}/${year}/${paddedNumber}`;
-
+  console.log(matricNumber);
   return matricNumber;
 };
 
