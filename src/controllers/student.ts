@@ -55,8 +55,8 @@ const createStudent = async (req: Request, res: Response) => {
       const password = await generateRandomCharacters(10);
       const admissionNumber = await generateMatricNumber();
 
-      const { hash } = await hashPassword(password);
-
+      const { hash, } = await hashPassword(password);
+console.log("here: ",hash,admissionNumber)
       await models.Students.create({
         student_id: uuidv4(),
         surname: student.dataValues.surname,
@@ -93,6 +93,7 @@ const createStudent = async (req: Request, res: Response) => {
 
     return response(res, 200, messages.updateStudent);
   } catch (error: any) {
+    console.log(error)
     return response(res, 400, error.message);
   }
 };
