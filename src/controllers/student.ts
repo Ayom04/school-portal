@@ -23,7 +23,6 @@ const createStudent = async (req: Request, res: Response) => {
   const { admin_id } = req.params;
   const { studentEmail, admissionStatus } = req.body;
   try {
-    console.log("I am here");
     if (!admin_id) throw new Error(messages.unauthorizedPermission);
 
     const student = await models.Registrations.findOne({
@@ -57,7 +56,7 @@ const createStudent = async (req: Request, res: Response) => {
       const admissionNumber = await generateMatricNumber();
 
       const { hash } = await hashPassword(password);
-      console.log("here: ", hash, admissionNumber);
+
       await models.Students.create({
         student_id: uuidv4(),
         surname: student.dataValues.surname,
@@ -94,7 +93,6 @@ const createStudent = async (req: Request, res: Response) => {
 
     return response(res, 200, messages.updateStudent);
   } catch (error: any) {
-    console.log(error);
     return response(res, 400, error.message);
   }
 };
