@@ -5,7 +5,7 @@ import response from "../utils/response";
 import { Request, Response } from "express";
 
 // Check if the uploads directory exists, if not, create it
-const uploadDir = path.join(__dirname, "../../uploads/images");
+const uploadDir = path.join(__dirname, "../../uploads/images/");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
