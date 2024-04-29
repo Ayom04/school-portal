@@ -5,7 +5,7 @@ import response from "../utils/response";
 import { Request, Response } from "express";
 
 // Check if the uploads directory exists, if not, create it
-const uploadDir = path.join(__dirname, "../../uploads/images/");
+const uploadDir = path.join(__dirname, "../../uploads/images");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
@@ -15,7 +15,7 @@ const allowedTypes = ["video", "audio", "application", "images"];
 
 const storageForFiles = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../../uploads/images/"));
+    cb(null, path.join(__dirname, "../../uploads/"));
   },
   filename: function (req: Request, file: any, cb) {
     // console.log("file: " +file);
